@@ -23,8 +23,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${lato.className}`} suppressHydrationWarning>
-      <body>
+    <html
+      lang="en"
+      className={`h-full ${lato.className}`}
+      suppressHydrationWarning
+    >
+      <body className="h-full">
         <NextTopLoader showSpinner={false} />
         <NuqsAdapter>
           <Providers>

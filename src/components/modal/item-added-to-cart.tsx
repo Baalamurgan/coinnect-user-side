@@ -48,7 +48,7 @@ const ItemAddedToCartModal = ({
 }) => {
   const { push } = useRouter();
   const [loading, startTransition] = useTransition();
-  const { cart } = useCart();
+  const { cart, setIsItemAddedToCartSuccessModalOpen } = useCart();
   const { user, fetchProfile } = useAuth();
 
   const defaultValues = {
@@ -64,6 +64,8 @@ const ItemAddedToCartModal = ({
   });
 
   const onSubmit = async (data: UserFormValue) => {
+    console.log(data);
+
     if (!data.terms || !cart)
       return toast.error(
         "Please agree to the terms and conditions to proceed."
@@ -101,7 +103,8 @@ const ItemAddedToCartModal = ({
           });
       }
       const newUser = await fetchProfile(user_id);
-      if (!newUser) toast.error("Something went wrong. Please try again");
+      if (!newUser || !cart)
+        toast.error("Something went wrong. Please try again");
       else {
         const response = await orderService.confirm(
           {
@@ -109,13 +112,14 @@ const ItemAddedToCartModal = ({
           },
           {},
           {
-            order_id: cart?.id,
+            order_id: cart.id,
           }
         );
         if (response.error)
           toast.error("Something went wrong. Please try again");
         else if (response.data) {
-          //   push(`/success`);
+          setIsItemAddedToCartSuccessModalOpen(false);
+          push(`/success/${cart.id}`);
           toast.success("Order confirmed");
         }
       }
@@ -124,10 +128,11 @@ const ItemAddedToCartModal = ({
 
   useEffect(() => {
     if (user) {
-      form.reset({
+      form.reset((p) => ({
+        ...p,
         email: user.email,
         username: user.username,
-      });
+      }));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user]);
@@ -212,7 +217,7 @@ const ItemAddedToCartModal = ({
               />
               <FormField
                 control={form.control}
-                name="phone"
+                name="terms"
                 render={() => (
                   <FormItem className="!mt-5">
                     <FormControl>
