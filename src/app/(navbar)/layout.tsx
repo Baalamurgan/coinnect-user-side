@@ -22,17 +22,5 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  return (
-    <html lang="en" className={`${lato.className}`} suppressHydrationWarning>
-      <body className={"overflow-hidden"}>
-        <NextTopLoader showSpinner={false} />
-        <NuqsAdapter>
-          <Providers>
-            <Toaster />
-            {children}
-          </Providers>
-        </NuqsAdapter>
-      </body>
-    </html>
-  );
+  return <Navbar>{children}</Navbar>;
 }
