@@ -1,8 +1,7 @@
-import CategoryHeader from "@/components/category/category-header";
+import BreadCrumb from "@/components/layout/breadcrumb";
 import CategoryList from "@/components/category/category-list";
 import ItemsList from "@/components/category/items-list";
 import { categories } from "@/data";
-import { sentencize } from "@/lib/utils";
 import { itemService } from "@/services/item/service";
 import { notFound } from "next/navigation";
 
@@ -23,10 +22,8 @@ export default async function Page({ params }: { params: { slug: string[] } }) {
 
   return (
     <div>
-      <CategoryHeader category={category} slug={slug} />
-      <h1 className="text-3xl text-blue-600 font-semibold">
-        {sentencize(category.name)}
-      </h1>
+      <BreadCrumb category={category} />
+      <h1 className="text-3xl text-blue-600 font-semibold">{category.name}</h1>
       {data && data.length > 0 ? (
         <ItemsList category={category} items={data} />
       ) : (

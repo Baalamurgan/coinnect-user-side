@@ -1,9 +1,9 @@
+import { findProductURL } from "@/lib/product";
 import { Category } from "@/services/category/types";
 import { Item } from "@/services/item/types";
-import Link from "next/link";
-import React from "react";
-import { Button } from "../ui/button";
 import Image from "next/image";
+import Link from "next/link";
+import { Button } from "../ui/button";
 
 const ItemsList = ({ items }: { items: Item[]; category: Category }) => {
   return (
@@ -22,7 +22,7 @@ const ItemsList = ({ items }: { items: Item[]; category: Category }) => {
 const ItemCard = ({ item }: { item: Item }) => {
   return (
     <div className=" shadow-lg rounded-md flex flex-col gap-y-6 items-center p-3 border border-blue-100">
-      <Link href={`/product/${item.name}`}>
+      <Link href={`/product/${findProductURL(item)}`}>
         <div className="flex flex-col items-center gap-y-4 group cursor-pointer max-w-[200px] transition-all">
           <div className="max-h-[100px] max-w-[200px]">
             <Image

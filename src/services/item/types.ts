@@ -11,6 +11,7 @@ export type Item = {
   price: number;
   gst: number;
   details: null;
+  slug: string;
   created_at: number;
   updated_at: number;
 };

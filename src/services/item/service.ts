@@ -12,6 +12,18 @@ const getAllOfACategory = createFetcher<
   method: "GET",
 });
 
+const getBySlug = createFetcher<
+  Item,
+  unknown,
+  {
+    slug: string;
+  }
+>({
+  url: ({ slug }) => ROUTES.ITEM.GETBYSLUG({ slug }),
+  method: "GET",
+});
+
 export const itemService = {
   getAllOfACategory,
+  getBySlug,
 };
