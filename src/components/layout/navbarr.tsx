@@ -3,7 +3,7 @@
 import { cn } from "@/lib/utils";
 import Link from "next/link";
 import * as React from "react";
-import CategoriesDropdown from "./navbar/CategoriesDropdown";
+import CategoriesDropdown from "./navbar/categories-navbar";
 
 const Navbar = () => {
   const navItems: {
