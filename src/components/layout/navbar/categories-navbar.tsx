@@ -1,30 +1,24 @@
 "use client";
 
-import * as React from "react";
-import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
-import {
-  HamburgerMenuIcon,
-  DotFilledIcon,
-  CheckIcon,
-  ChevronRightIcon,
-} from "@radix-ui/react-icons";
-import { Category } from "@/services/category/types";
 import { categories } from "@/data";
-import "./styles.css";
-import Link from "next/link";
 import { findCategoryURL } from "@/lib/category";
+import { Category } from "@/services/category/types";
+import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
+import { ChevronRightIcon, HamburgerMenuIcon } from "@radix-ui/react-icons";
+import Link from "next/link";
+import "./styles.css";
 
 const CategoriesDropdown = () => {
-  const [bookmarksChecked, setBookmarksChecked] = React.useState(true);
-  const [urlsChecked, setUrlsChecked] = React.useState(false);
-  const [person, setPerson] = React.useState("pedro");
+  // const [bookmarksChecked, setBookmarksChecked] = React.useState(true);
+  // const [urlsChecked, setUrlsChecked] = React.useState(false);
+  // const [person, setPerson] = React.useState("pedro");
 
   return (
     <DropdownMenu.Root>
       <DropdownMenu.Trigger asChild>
-        <div className="flex items-center justify-center cursor-pointer gap-x-1 p-2">
-          <button className="IconButton" aria-label="Customise options">
-            <HamburgerMenuIcon />
+        <div className="flex items-center justify-center gap-x-1.5 cursor-pointer p-2">
+          <button aria-label="Customise options">
+            <HamburgerMenuIcon className="text-black" />
           </button>
           <p>Categories</p>
         </div>

@@ -131,4 +131,8 @@ export const ROUTES = {
   CATEGORY: {
     GETALL: apiRoute(`/category`),
   },
+  ITEM: {
+    GETALLOFACATEGORY: (p: { category_id: string }) =>
+      apiRoute(`/item/category/${p.category_id}`),
+  },
 };

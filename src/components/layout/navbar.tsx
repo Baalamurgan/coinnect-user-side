@@ -4,6 +4,7 @@ import { cn } from "@/lib/utils";
 import Link from "next/link";
 import * as React from "react";
 import CategoriesDropdown from "./navbar/categories-navbar";
+import { Logo } from "../logo";
 
 const Navbar = () => {
   const navItems: {
@@ -33,6 +34,7 @@ const Navbar = () => {
 
   return (
     <div className="flex items-center max-h-[60px] min-h-[60px] h-full gap-x-10 w-full px-5">
+      <Logo />
       {navItems.map((navItem, i) => {
         return (
           <div key={i} className="hover:bg-gray-200">

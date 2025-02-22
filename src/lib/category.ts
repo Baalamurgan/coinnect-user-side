@@ -9,29 +9,13 @@ export const findCategoryURL = (
 ): string => {
   const url = existingURL || "";
   if (!category.parent_category_id)
-    return (
-      formatCategoryURL(category.name) +
-      (existingURL ? CATEGORY_URL_SEPARATOR : "") +
-      url
-    );
+    return category.slug + (existingURL ? CATEGORY_URL_SEPARATOR : "") + url;
   const parent_category = categories.find(
     (c) => c.id === category.parent_category_id
   );
   if (!parent_category) return url;
   return findCategoryURL(
     parent_category,
-    formatCategoryURL(category.name) +
-      (existingURL ? CATEGORY_URL_SEPARATOR : "") +
-      url
+    category.slug + (existingURL ? CATEGORY_URL_SEPARATOR : "") + url
   );
-};
-
-export const formatCategoryURL = (categoryURL: string) => {
-  return categoryURL
-    .replaceAll("–", "-")
-    .replaceAll(" - ", "-")
-    .replaceAll("/", "-")
-    .replaceAll(" ", "-")
-    .toLowerCase()
-    .trim();
 };

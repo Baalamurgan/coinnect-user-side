@@ -1,4 +1,5 @@
 import Navbar from "@/components/layout/navbar";
+import Section from "@/components/ui/section";
 
 export default function RootLayout({
   children,
@@ -8,7 +9,7 @@ export default function RootLayout({
   return (
     <>
       <Navbar />
-      {children}
+      <Section>{children}</Section>
     </>
   );
 }
