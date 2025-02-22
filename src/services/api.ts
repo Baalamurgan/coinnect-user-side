@@ -30,7 +30,7 @@ export interface ErrorResponse {
   config: any;
   message: "Request failed with status code 500" | string;
   name: "AxiosError" | string;
-  stack: "AxiosError: Request failed with status code 500\n    at settle (webpack-internal:///(rsc)/../../node_modules/axios/lib/core/settle.js:24:12)\n    at IncomingMessage.handleStreamEnd (webpack-internal:///(rsc)/../../node_modules/axios/lib/adapters/http.js:629:71)\n    at IncomingMessage.emit (node:events:531:35)\n    at endReadableNT (node:internal/streams/readable:1696:12)\n    at process.processTicksAndRejections (node:internal/process/task_queues:82:21)\n    at Axios.request (webpack-internal:///(rsc)/../../node_modules/axios/lib/core/Axios.js:57:41)\n    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n    at async eval (webpack-internal:///(rsc)/./services/api.ts:40:16)\n    at async ProductListingPage (webpack-internal:///(rsc)/./src/features/products/components/product-listing.tsx:32:26)";
+  stack: "AxiosError: Request failed with status code...";
   status: 400 | 409 | 500 | 502;
   response?: {
     data: {

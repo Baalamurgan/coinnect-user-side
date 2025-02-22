@@ -1,4 +1,4 @@
-import { findProductURL } from "@/lib/product";
+import { findItemURL } from "@/lib/item";
 import { Category } from "@/services/category/types";
 import { Item } from "@/services/item/types";
 import Image from "next/image";
@@ -22,7 +22,7 @@ const ItemsList = ({ items }: { items: Item[]; category: Category }) => {
 const ItemCard = ({ item }: { item: Item }) => {
   return (
     <div className=" shadow-lg rounded-md flex flex-col gap-y-6 items-center p-3 border border-blue-100">
-      <Link href={`/product/${findProductURL(item)}`}>
+      <Link href={`/item/${findItemURL(item)}`}>
         <div className="flex flex-col items-center gap-y-4 group cursor-pointer max-w-[200px] transition-all">
           <div className="max-h-[100px] max-w-[200px]">
             <Image

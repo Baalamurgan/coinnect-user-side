@@ -35,7 +35,7 @@ const BreadCrumb = ({
           );
         })}
         {item && (
-          <BreadCrumbItem label={item.name} link={`/product/${item.slug}`} />
+          <BreadCrumbItem label={item.name} link={`/item/${item.slug}`} />
         )}
       </div>
     </div>
