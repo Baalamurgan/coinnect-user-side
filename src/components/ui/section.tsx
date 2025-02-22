@@ -1,4 +1,4 @@
-import React, { CSSProperties, FC } from "react";
+import React, { CSSProperties } from "react";
 
 interface Props
   extends React.DetailedHTMLProps<
@@ -17,7 +17,7 @@ export default function Section({
   innerStyle,
   noMaxWidth = false,
   ...props
-}): FC<Props> {
+}: Props) {
   return (
     <div
       {...props}

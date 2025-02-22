@@ -4,8 +4,12 @@ import { categories } from "@/data";
 import { itemService } from "@/services/item/service";
 import { notFound } from "next/navigation";
 
-export default async function Page({ params }: { params: { slug: string } }) {
-  const { slug } = await params;
+export default async function Page({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}) {
+  const slug = (await params).slug;
 
   const { data } = await itemService.getBySlug(
     {},

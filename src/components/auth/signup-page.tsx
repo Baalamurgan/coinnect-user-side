@@ -2,6 +2,7 @@ import { Logo } from "@/components/logo";
 import { Metadata } from "next";
 import Link from "next/link";
 import UserAuthSignupForm from "./user-auth-signup-form";
+import { Suspense } from "react";
 
 export const metadata: Metadata = {
   title: "Authentication",
@@ -26,7 +27,9 @@ export default function SignUpPage() {
               Enter your details below to create your account
             </p>
           </div>
-          <UserAuthSignupForm />
+          <Suspense>
+            <UserAuthSignupForm />
+          </Suspense>
           <p className="px-8 text-center text-sm text-muted-foreground">
             By clicking continue, you agree to our{" "}
             <Link

@@ -1,5 +1,4 @@
 import Loader from "@/components/loader";
-import { Button } from "@/components/ui/button";
 import { categories } from "@/data";
 
 const HomePage = async () => {
