@@ -1,4 +1,5 @@
 import { findItemURL } from "@/lib/item";
+import displayPrice from "@/lib/price";
 import { Category } from "@/services/category/types";
 import { Item } from "@/services/item/types";
 import Image from "next/image";
@@ -39,8 +40,7 @@ const ItemCard = ({ item }: { item: Item }) => {
         </div>
       </Link>
       <p className="text-sm">
-        ₹{item.price.toFixed(2)} +
-        <span className="text-xs"> {item.gst}% GST</span>
+        {displayPrice({ price: item.price, gst: item.gst })}
       </p>
       <Button className="cursor-pointer h-6">Add to cart</Button>
     </div>

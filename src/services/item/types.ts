@@ -10,8 +10,17 @@ export type Item = {
   sold: number;
   price: number;
   gst: number;
-  details: null;
+  details: ItemDetails[];
   slug: string;
   created_at: number;
   updated_at: number;
+};
+
+type ItemDetails = {
+  id: string;
+  item_id: string;
+  attribute: string;
+  value: string;
+  created_at: string;
+  updated_at: string;
 };
