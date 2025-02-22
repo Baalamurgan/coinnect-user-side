@@ -11,7 +11,16 @@ const getCategoriesJson = async () => {
     if (data?.error) throw new Error(data.error);
     const { saved, error } = await saveFile(
       __dirname + "/../data/categories.json",
-      data.data.categories
+      data.data.categories.map((c) => ({
+        ...c,
+        slug: c.name
+          .replaceAll("–", "-")
+          .replaceAll(" - ", "-")
+          .replaceAll("/", "-")
+          .replaceAll(" ", "-")
+          .toLowerCase()
+          .trim(),
+      }))
     );
     if (saved) {
       console.log("Categories Written successfully");

@@ -1,7 +1,7 @@
 import { categories } from "@/data";
 import { Category } from "@/services/category/types";
 
-const CATEGORY_URL_SEPARATOR = "--";
+const CATEGORY_URL_SEPARATOR = "/";
 
 export const findCategoryURL = (
   category: Category,
@@ -28,11 +28,10 @@ export const findCategoryURL = (
 
 export const formatCategoryURL = (categoryURL: string) => {
   return categoryURL
-    .replaceAll("/", "-")
-    .toLowerCase()
-    .split("/")[0]
-    .trim()
-    .replaceAll("--", "-")
+    .replaceAll("–", "-")
     .replaceAll(" - ", "-")
-    .replaceAll(" ", "-");
+    .replaceAll("/", "-")
+    .replaceAll(" ", "-")
+    .toLowerCase()
+    .trim();
 };
