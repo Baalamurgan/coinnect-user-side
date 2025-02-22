@@ -7,10 +7,11 @@ import { Category } from "@/services/category/types";
 import { Item } from "@/services/item/types";
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useTransition } from "react";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import Tabs from "../ui/tabs";
+import { useCart } from "@/context/CartContext";
 
 const ItemInformation = ({
   item,
@@ -19,7 +20,10 @@ const ItemInformation = ({
   item: Item;
   category: Category;
 }) => {
-  const [no_of_items, setNoOfItems] = useState(1);
+  const [quantity, setQuantity] = useState(1);
+  const [isLoading, startTransition] = useTransition();
+  const { addItemToCartHandler, setIsItemAddedToCartSuccessModalOpen } =
+    useCart();
   return (
     <div>
       <div className="flex gap-x-8">
@@ -47,15 +51,29 @@ const ItemInformation = ({
             {item.stock > 1 ? (
               <Input
                 type="number"
-                value={no_of_items}
-                onChange={(e) => setNoOfItems(Number(e.target.value))}
+                value={quantity}
+                onChange={(e) => setQuantity(Number(e.target.value))}
                 min={1}
                 max={item.stock}
                 className="max-w-[60px] border-[0.1px] h-7 border-green-500 border-solid"
               />
             ) : null}
-            <Button className="my-3 bg-green-600 hover:bg-green-700 h-5 w-[100px] cursor-pointer">
-              Add to cart ({no_of_items})
+            <Button
+              className="my-3 bg-green-600 hover:bg-green-700 h-5 w-[100px] cursor-pointer"
+              loading={isLoading}
+              onClick={async () => {
+                startTransition(async () => {
+                  const response = await addItemToCartHandler({
+                    item_id: item.id,
+                    quantity,
+                  });
+                  if (response.success) {
+                    setIsItemAddedToCartSuccessModalOpen(true);
+                  }
+                });
+              }}
+            >
+              Add to cart ({quantity})
             </Button>
           </div>
           <hr />

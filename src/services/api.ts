@@ -127,6 +127,8 @@ export const ROUTES = {
     SIGNUP: apiRoute(`/auth/signup`),
     LOGIN: apiRoute(`/auth/login`),
     FETCHPROFILE: apiRoute(`/auth/profile`),
+    UPDATEPROFILE: (p: { user_id: string }) =>
+      apiRoute(`/auth/update/${p.user_id}`),
   },
   CATEGORY: {
     GETALL: apiRoute(`/category`),
@@ -138,5 +140,9 @@ export const ROUTES = {
   },
   ORDER: {
     CREATE: apiRoute(`/order`),
+    GETBYID: (p: { order_id: string }) => apiRoute(`/order/${p.order_id}`),
+    ADDITEM: apiRoute(`/order/item/add`),
+    CONFIRM: (p: { order_id: string }) =>
+      apiRoute(`/order/${p.order_id}/confirm`),
   },
 };

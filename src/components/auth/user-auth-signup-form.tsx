@@ -63,14 +63,12 @@ export default function UserAuthSignupForm() {
           response?.error.response?.data?.message || "Error signing up"
         );
       else if (response.data) {
-        await fetchProfile();
+        await fetchProfile(response.data.id);
         push(callbackUrl ?? "/home");
         toast.success(`Signed up ${data.email} successfully`);
       }
     });
   };
-
-  console.log({ user });
 
   useEffect(() => {
     if (user) push(`/home`);

@@ -16,7 +16,7 @@ interface AuthContextType {
   user: Profile | null | undefined;
   loading: boolean;
   logout: () => void;
-  fetchProfile: () => Promise<void>;
+  fetchProfile: (_user_id_prop?: string) => Promise<Profile | null>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -49,10 +49,11 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     push("/login");
   };
 
-  const fetchProfile = async () => {
+  const fetchProfile = async (user_id_prop?: string) => {
     setUser(undefined);
     setLoading(true);
-    const user_id = localStorage.getItem("user_id") as string | undefined;
+    const user_id =
+      user_id_prop || (localStorage.getItem("user_id") as string | undefined);
     if (user_id) {
       const response = await authService.fetchProfile(
         {
@@ -60,15 +61,20 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         },
         {}
       );
-      if (response.error) setUser(null);
-      else if (response.data) {
+      if (response.error) {
+        setUser(null);
+        return null;
+      } else if (response.data) {
         localStorage.setItem("user_id", response.data.id);
         setUser(response.data);
+        return response.data;
       }
     } else {
       setUser(null);
+      return null;
     }
     setLoading(false);
+    return null;
   };
 
   const value = {

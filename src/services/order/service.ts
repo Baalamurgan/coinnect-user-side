@@ -1,10 +1,10 @@
 import { createFetcher, ROUTES } from "../api";
-import { Order } from "./types";
+import { AddItemToOrderPayload, Cart } from "./types";
 
 const create = createFetcher<
-  Order[] | null,
+  Cart,
   {
-    user_id: string;
+    user_id?: string;
   },
   unknown
 >({
@@ -13,9 +13,40 @@ const create = createFetcher<
   //   withTokenKey: "profile_token",
 });
 
+const getById = createFetcher<
+  Cart,
+  unknown,
+  {
+    order_id: string;
+  }
+>({
+  url: ({ order_id }) => ROUTES.ORDER.GETBYID({ order_id }),
+  method: "GET",
+});
+
+const addItem = createFetcher<Cart, AddItemToOrderPayload, unknown>({
+  url: ROUTES.ORDER.ADDITEM,
+  method: "POST",
+});
+
+const confirm = createFetcher<
+  string,
+  {
+    user_id: string;
+  },
+  {
+    order_id: string;
+  }
+>({
+  url: ({ order_id }) => ROUTES.ORDER.CONFIRM({ order_id }),
+  method: "POST",
+});
+
 export const orderService = {
   create,
-  // addItem,
+  getById,
+  addItem,
+  confirm,
   // removeItem,
   // delete,
 };

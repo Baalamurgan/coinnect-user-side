@@ -20,3 +20,9 @@ export type SignupPayload = {
 export type FetchProfilePayload = {
   user_id: string;
 };
+
+export type UpdateProfilePayload = {
+  username: string;
+  email?: string;
+  phone?: string;
+};

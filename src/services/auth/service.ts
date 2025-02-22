@@ -1,37 +1,17 @@
 import { createFetcher, ROUTES } from "@/services/api";
-import { FetchProfilePayload, Profile, SignupPayload } from "./types";
-
-const getAllOrders = createFetcher<
-  Profile[] | null,
-  unknown,
-  unknown
-  // {
-  //   page: number;
-  // }
->({
-  url: ROUTES.AUTH.USERS.GETALL,
-  method: "GET",
-  withTokenKey: "profile_token",
-});
-
-const signup = createFetcher<
-  Profile[] | null,
+import {
+  FetchProfilePayload,
+  Profile,
   SignupPayload,
-  {
-    page: number;
-  }
->({
+  UpdateProfilePayload,
+} from "./types";
+
+const signup = createFetcher<Profile | null, SignupPayload, unknown>({
   url: ROUTES.AUTH.SIGNUP,
   method: "POST",
 });
 
-const login = createFetcher<
-  Profile[] | null,
-  unknown,
-  {
-    page: number;
-  }
->({
+const login = createFetcher<Profile | null, unknown, unknown>({
   url: ROUTES.AUTH.LOGIN,
   method: "POST",
 });
@@ -41,9 +21,20 @@ const fetchProfile = createFetcher<Profile, FetchProfilePayload>({
   method: "POST",
 });
 
+const updateProfile = createFetcher<
+  string,
+  UpdateProfilePayload,
+  {
+    user_id: string;
+  }
+>({
+  url: ({ user_id }) => ROUTES.AUTH.UPDATEPROFILE({ user_id }),
+  method: "POST",
+});
+
 export const authService = {
-  getAllOrders,
   signup,
   login,
   fetchProfile,
+  updateProfile,
 };

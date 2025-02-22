@@ -27,22 +27,26 @@ const BreadCrumb = ({
               key={s}
               label={slug_category.name}
               link={
-                slug_category.slug === category.slug
-                  ? `/category/${findCategoryURL(slug_category)}`
-                  : ""
+                slug_category.slug === category.slug && !item
+                  ? ""
+                  : `/category/${findCategoryURL(slug_category)}`
               }
             />
           );
         })}
-        {item && (
-          <BreadCrumbItem label={item.name} link={`/item/${item.slug}`} />
-        )}
+        {item && <BreadCrumbItem label={item.name} />}
       </div>
     </div>
   );
 };
 
-const BreadCrumbItem = ({ label, link }: { label: string; link: string }) => {
+const BreadCrumbItem = ({
+  label,
+  link = "",
+}: {
+  label: string;
+  link?: string;
+}) => {
   const Component = link ? Link : Fragment;
   return (
     <Component href={link}>
