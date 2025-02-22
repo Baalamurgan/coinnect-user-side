@@ -14,10 +14,11 @@ import { authService } from "@/services/auth/service";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useTransition } from "react";
+import { useEffect, useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import * as z from "zod";
+import Loader from "../loader";
 
 const formSchema = z.object({
   username: z.string().min(1, {
@@ -34,7 +35,7 @@ export default function UserAuthSignupForm() {
   const callbackUrl = searchParams.get("callbackUrl");
   const [loading, startTransition] = useTransition();
   const { push } = useRouter();
-  const { fetchProfile } = useAuth();
+  const { user, fetchProfile } = useAuth();
 
   const defaultValues = {
     username: "",
@@ -62,13 +63,20 @@ export default function UserAuthSignupForm() {
           response?.error.response?.data?.message || "Error signing up"
         );
       else if (response.data) {
-        localStorage.setItem("email", data.email);
-        fetchProfile();
+        await fetchProfile();
         push(callbackUrl ?? "/home");
         toast.success(`Signed up ${data.email} successfully`);
       }
     });
   };
+
+  console.log({ user });
+
+  useEffect(() => {
+    if (user) push(`/home`);
+  }, [user, push]);
+
+  if (user || user === undefined) return <Loader />;
 
   return (
     <>

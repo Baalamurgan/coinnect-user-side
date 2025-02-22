@@ -182,7 +182,6 @@ const SubCategoryList = ({ category }: { category: Category }) => {
         <Link href={`/category/${findCategoryURL(category)}`}>
           <div
             className="flex items-center gap-x-1"
-            onClick={() => console.log(category, subCategories)}
             title={`/category/${findCategoryURL(category)}`}
           >
             <p className="font-semibold">{category.name}</p>

@@ -14,7 +14,7 @@ const CategoryList = ({ category }: { category: Category; items?: Item[] }) => {
       {subCategories.length === 0 ? (
         <p className="text-center">No data found</p>
       ) : (
-        <div className="grid grid-cols-4 gap-y-3 gap-x-8">
+        <div className="grid grid-cols-3 lg:grid-cols-4 gap-y-3 gap-x-8">
           {subCategories.map((category) => {
             return (
               <div key={category.id}>
@@ -34,7 +34,7 @@ const CategoryCard = ({ category }: { category: Category }) => {
       <Link href={`/category/${findCategoryURL(category)}`}>
         <div className="flex items-center gap-x-1 group cursor-pointer">
           <EnvelopeClosedIcon className="h-5 w-5 group-hover:text-gray-800" />
-          <p className="group-hover:text-gray-800 group-hover:underline">
+          <p className="group-hover:text-gray-800 group-hover:underline whitespace-nowrap">
             {category.name}
           </p>
         </div>

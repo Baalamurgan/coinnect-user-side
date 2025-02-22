@@ -23,7 +23,6 @@ const signup = createFetcher<
 >({
   url: ROUTES.AUTH.SIGNUP,
   method: "POST",
-  withTokenKey: "profile_token",
 });
 
 const login = createFetcher<

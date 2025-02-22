@@ -44,7 +44,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   const logout = (): void => {
     setUser(undefined);
-    localStorage.removeItem("email");
+    localStorage.removeItem("user_id");
     toast.success("Logged out successfully");
     push("/login");
   };
@@ -52,16 +52,19 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const fetchProfile = async () => {
     setUser(undefined);
     setLoading(true);
-    const email = localStorage.getItem("email") as string | undefined;
-    if (email) {
+    const user_id = localStorage.getItem("user_id") as string | undefined;
+    if (user_id) {
       const response = await authService.fetchProfile(
         {
-          email,
+          user_id,
         },
         {}
       );
       if (response.error) setUser(null);
-      else if (response.data) setUser(response.data);
+      else if (response.data) {
+        localStorage.setItem("user_id", response.data.id);
+        setUser(response.data);
+      }
     } else {
       setUser(null);
     }
