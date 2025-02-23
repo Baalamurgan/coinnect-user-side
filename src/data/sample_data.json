@@ -27,6 +27,7 @@
         "price": 300,
         "gst": 5,
         "details": null,
+        "slug": "1-rupee-2023-75th-year-of-independence-kolkata-3’0-clock-rotation-error-steel",
         "created_at": 1740193440,
         "updated_at": 1740193440
       }
@@ -53,6 +54,7 @@
         "price": 400,
         "gst": 5,
         "details": null,
+        "slug": "1-2-pice-1910-kolkata-bronze-(ghost-error)",
         "created_at": 1740193354,
         "updated_at": 1740193354
       }
@@ -106,6 +108,7 @@
         "price": 150,
         "gst": 5,
         "details": null,
+        "slug": "10-rupees-2015-dr.s.radhakrishnan-mumbai-lion-variety-nickel-bronze",
         "created_at": 1740193644,
         "updated_at": 1740193644
       }
@@ -159,6 +162,7 @@
         "price": 50,
         "gst": 5,
         "details": null,
+        "slug": "one-pice-1950-mumbai-bronze",
         "created_at": 1740193181,
         "updated_at": 1740193181
       }
@@ -185,6 +189,7 @@
         "price": 800,
         "gst": 5,
         "details": null,
+        "slug": "one-pice-mint-wise-complete-set-(except-1953,1954-&-1955-hyderabad)-bronze",
         "created_at": 1740193115,
         "updated_at": 1740193115
       }
@@ -211,6 +216,7 @@
         "price": 1000,
         "gst": 5,
         "details": null,
+        "slug": "one-pice-complete-year-wise-set-1950-to-1955",
         "created_at": 1740193017,
         "updated_at": 1740193017
       }
@@ -498,6 +504,7 @@
         "price": 3500,
         "gst": 5,
         "details": null,
+        "slug": "20-paise-1971-food-for-all-mumbai-bronze",
         "created_at": 1740192632,
         "updated_at": 1740192632
       }
@@ -533,6 +540,7 @@
         "price": 75,
         "gst": 5,
         "details": null,
+        "slug": "20-paise-1969-mahatma-gandhi-hyderabad-bronze",
         "created_at": 1740192489,
         "updated_at": 1740192489
       },
@@ -549,6 +557,7 @@
         "price": 50,
         "gst": 5,
         "details": null,
+        "slug": "20-paise-1969-mahatma-gandhi-mumbai-bronze",
         "created_at": 1740192556,
         "updated_at": 1740192556
       }
@@ -647,6 +656,7 @@
         "price": 3500,
         "gst": 5,
         "details": null,
+        "slug": "10-paise-1974-planned-families-–-food-for-all-hyderabad-aluminium",
         "created_at": 1740192153,
         "updated_at": 1740192153
       },
@@ -663,6 +673,7 @@
         "price": 150,
         "gst": 5,
         "details": null,
+        "slug": "10-paise-1974-planned-families-–-food-for-all-mumbai-aluminium",
         "created_at": 1740192214,
         "updated_at": 1740192214
       }
@@ -698,6 +709,7 @@
         "price": 125,
         "gst": 5,
         "details": null,
+        "slug": "5-paise-1978-food-&-shelter-for-all-kolkata-aluminium",
         "created_at": 1740191922,
         "updated_at": 1740191922
       },
@@ -714,6 +726,7 @@
         "price": 75,
         "gst": 5,
         "details": null,
+        "slug": "5-paise-1978-food-&-shelter-for-all-mumbai-aluminium",
         "created_at": 1740191967,
         "updated_at": 1740191967
       }
@@ -740,6 +753,7 @@
         "price": 200,
         "gst": 5,
         "details": null,
+        "slug": "5-paise-1977-save-for-development-hyderabad-aluminium",
         "created_at": 1740191816,
         "updated_at": 1740191816
       },
@@ -756,6 +770,7 @@
         "price": 50,
         "gst": 5,
         "details": null,
+        "slug": "5-paise-1977-save-for-development-kolkata-aluminium",
         "created_at": 1740191850,
         "updated_at": 1740191850
       }
@@ -782,6 +797,7 @@
         "price": 75,
         "gst": 5,
         "details": null,
+        "slug": "5-paise-1976-food-&-work-for-all-hyderabad-aluminium",
         "created_at": 1740191601,
         "updated_at": 1740191601
       },
@@ -798,6 +814,7 @@
         "price": 100,
         "gst": 5,
         "details": null,
+        "slug": "5-paise-1976-food-&-work-for-all-kolkata-aluminium",
         "created_at": 1740191673,
         "updated_at": 1740191673
       },
@@ -814,6 +831,7 @@
         "price": 30,
         "gst": 5,
         "details": null,
+        "slug": "5-paise-1976-food-&-work-for-all-mumbai-aluminium",
         "created_at": 1740191708,
         "updated_at": 1740191708
       }
