@@ -24,11 +24,6 @@ const getById = createFetcher<
   method: "GET",
 });
 
-const addItem = createFetcher<Cart, AddItemToOrderPayload, unknown>({
-  url: ROUTES.ORDER.ADDITEM,
-  method: "POST",
-});
-
 const confirm = createFetcher<
   string,
   {
@@ -42,11 +37,28 @@ const confirm = createFetcher<
   method: "POST",
 });
 
+const addItem = createFetcher<Cart, AddItemToOrderPayload, unknown>({
+  url: ROUTES.ORDER.ITEM.ADD,
+  method: "POST",
+});
+
+const removeItem = createFetcher<
+  string,
+  unknown,
+  {
+    order_id: string;
+    order_item_id: string;
+  }
+>({
+  url: (p: { order_id: string; order_item_id: string }) =>
+    ROUTES.ORDER.ITEM.REMOVE(p),
+  method: "DELETE",
+});
+
 export const orderService = {
   create,
   getById,
-  addItem,
   confirm,
-  // removeItem,
-  // delete,
+  addItem,
+  removeItem,
 };

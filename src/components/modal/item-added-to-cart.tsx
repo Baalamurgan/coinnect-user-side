@@ -20,7 +20,6 @@ import React, { useEffect, useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import * as z from "zod";
-import Loader from "../loader";
 import { Button } from "../ui/button";
 import Checkbox from "../ui/checkbox";
 import Modal from "../ui/modal";
@@ -48,7 +47,11 @@ const ItemAddedToCartModal = ({
 }) => {
   const { push } = useRouter();
   const [loading, startTransition] = useTransition();
-  const { cart, setIsItemAddedToCartSuccessModalOpen } = useCart();
+  const {
+    cart,
+    isConfirmOrderModalSuccessModalOpen,
+    setIsConfirmOrderModalSuccessModalOpen,
+  } = useCart();
   const { user, fetchProfile } = useAuth();
 
   const defaultValues = {
@@ -118,7 +121,7 @@ const ItemAddedToCartModal = ({
         if (response.error)
           toast.error("Something went wrong. Please try again");
         else if (response.data) {
-          setIsItemAddedToCartSuccessModalOpen(false);
+          setIsConfirmOrderModalSuccessModalOpen("");
           localStorage.removeItem("order_id");
           push(`/success/${cart.id}`);
           toast.success("Order confirmed");
@@ -138,7 +141,7 @@ const ItemAddedToCartModal = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user]);
 
-  if (!cart || user === undefined) return <Loader />;
+  if (!cart || user === undefined) return null;
 
   return (
     <Modal isOpen={isOpen} setIsOpen={setIsOpen}>
@@ -146,7 +149,9 @@ const ItemAddedToCartModal = ({
         <Dialog.Overlay className="DialogOverlay" />
         <Dialog.Content className="DialogContent !bg-white !overflow-auto ">
           <Dialog.Title className="text-xl font-medium">
-            Item added to cart!
+            {isConfirmOrderModalSuccessModalOpen === "add_item"
+              ? "Item added to cart!"
+              : "Confirm your order"}
           </Dialog.Title>
           <Dialog.Description className="text-sm font-medium mt-2">
             Would you like to enter your details?
@@ -251,24 +256,28 @@ const ItemAddedToCartModal = ({
                     variant="outline"
                     type="button"
                   >
-                    Continue shopping
+                    {isConfirmOrderModalSuccessModalOpen === "add_item"
+                      ? "Continue shopping"
+                      : "View Cart"}
                   </Button>
                 </Dialog.Close>
                 <div className="flex items-center justify-end w-full gap-x-6">
-                  <div
-                    onClick={() => {
-                      setIsItemAddedToCartSuccessModalOpen(false);
-                      push(`/cart`);
-                    }}
-                  >
-                    <Button
-                      className="h-5 cursor-pointer"
-                      variant="secondary"
-                      type="button"
+                  {isConfirmOrderModalSuccessModalOpen === "add_item" ? (
+                    <div
+                      onClick={() => {
+                        setIsConfirmOrderModalSuccessModalOpen("");
+                        push(`/cart`);
+                      }}
                     >
-                      View Cart
-                    </Button>
-                  </div>
+                      <Button
+                        className="h-5 cursor-pointer"
+                        variant="secondary"
+                        type="button"
+                      >
+                        View Cart
+                      </Button>
+                    </div>
+                  ) : null}
                   {/* <Dialog.Close asChild> */}
                   <Button className="h-5 cursor-pointer">Confirm Order</Button>
                   {/* </Dialog.Close> */}

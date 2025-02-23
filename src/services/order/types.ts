@@ -1,3 +1,5 @@
+import { Item } from "../item/types";
+
 export type Cart = {
   id: string;
   user_id: string;
@@ -19,6 +21,7 @@ export type OrderItem = {
   order_item_status: OrderItemStatus;
   quantity: number;
   updated_at: number;
+  metadata: Omit<Item, "id" | "updated_at" | "created_at" | "slug"> | null;
 };
 
 export type OrderStatus = "pending" | "booked" | "cancelled";

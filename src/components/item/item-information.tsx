@@ -22,7 +22,7 @@ const ItemInformation = ({
 }) => {
   const [quantity, setQuantity] = useState(1);
   const [isLoading, startTransition] = useTransition();
-  const { addItemToCartHandler, setIsItemAddedToCartSuccessModalOpen } =
+  const { addItemToCartHandler, setIsConfirmOrderModalSuccessModalOpen } =
     useCart();
   return (
     <div>
@@ -68,7 +68,7 @@ const ItemInformation = ({
                     quantity,
                   });
                   if (response.success) {
-                    setIsItemAddedToCartSuccessModalOpen(true);
+                    setIsConfirmOrderModalSuccessModalOpen("add_item");
                   }
                 });
               }}

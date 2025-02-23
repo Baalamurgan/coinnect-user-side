@@ -13,8 +13,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   const {
-    isItemAddedToCartSuccessModalOpen,
-    setIsItemAddedToCartSuccessModalOpen,
+    isConfirmOrderModalSuccessModalOpen,
+    setIsConfirmOrderModalSuccessModalOpen,
   } = useCart();
   const { user } = useAuth();
 
@@ -24,10 +24,12 @@ export default function RootLayout({
     <>
       <Navbar user={user} />
       <Section className="h-[calc(100vh-60px)]">{children}</Section>
-      {isItemAddedToCartSuccessModalOpen && (
+      {isConfirmOrderModalSuccessModalOpen && (
         <ItemAddedToCartModal
-          isOpen={isItemAddedToCartSuccessModalOpen}
-          setIsOpen={setIsItemAddedToCartSuccessModalOpen}
+          isOpen={!!isConfirmOrderModalSuccessModalOpen}
+          setIsOpen={(value) =>
+            setIsConfirmOrderModalSuccessModalOpen((p) => (value ? p : ""))
+          }
         />
       )}
     </>

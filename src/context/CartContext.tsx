@@ -14,16 +14,23 @@ import React, {
 } from "react";
 import { toast } from "sonner";
 
+export type ConfimOrderModalVariant = "add_item" | "confirm_order" | "";
+
 interface CartContextType {
   cart: Cart | null | undefined;
   loading: boolean;
-  isItemAddedToCartSuccessModalOpen: boolean;
-  setIsItemAddedToCartSuccessModalOpen: Dispatch<SetStateAction<boolean>>;
-  fetchCart: (_order_id?: string) => Promise<Cart | null>;
-  addItemToCartHandler: ({
-    item_id,
-    quantity,
-  }: {
+  isConfirmOrderModalSuccessModalOpen: ConfimOrderModalVariant;
+  setIsConfirmOrderModalSuccessModalOpen: Dispatch<
+    SetStateAction<ConfimOrderModalVariant>
+  >;
+  fetchCart: (order_id?: string) => Promise<Cart | null>;
+  removeItemFromCartHandler: (p: {
+    order_id: string;
+    order_item_id: string;
+  }) => Promise<{
+    success: boolean;
+  }>;
+  addItemToCartHandler: (p: {
     order_id?: string;
     item_id: string;
     quantity?: number;
@@ -48,9 +55,9 @@ export const CartProvider: React.FC<CartProviderProps> = ({ children }) => {
   const [cart, setCart] = useState<Cart | undefined | null>(undefined);
   const [loading, setLoading] = useState<boolean>(true);
   const [
-    isItemAddedToCartSuccessModalOpen,
-    setIsItemAddedToCartSuccessModalOpen,
-  ] = useState(false);
+    isConfirmOrderModalSuccessModalOpen,
+    setIsConfirmOrderModalSuccessModalOpen,
+  ] = useState<ConfimOrderModalVariant>("");
 
   useEffect(() => {
     fetchCart();
@@ -133,13 +140,43 @@ export const CartProvider: React.FC<CartProviderProps> = ({ children }) => {
     return { success: false };
   };
 
+  const removeItemFromCartHandler = async ({
+    order_id,
+    order_item_id,
+  }: {
+    order_id: string;
+    order_item_id: string;
+  }): Promise<{ success: boolean }> => {
+    if (order_id) {
+      const response = await orderService.removeItem(
+        {},
+        {},
+        {
+          order_id,
+          order_item_id,
+        }
+      );
+      if (response.error) {
+        setCart(null);
+        toast.error("Something went wrong. Please try again");
+        return { success: false };
+      } else if (response.data) {
+        toast.success("Item removed to cart");
+        await fetchCart(order_id);
+        return { success: true };
+      }
+    }
+    return { success: false };
+  };
+
   const value = {
     cart,
     loading,
-    isItemAddedToCartSuccessModalOpen,
-    setIsItemAddedToCartSuccessModalOpen,
+    isConfirmOrderModalSuccessModalOpen,
+    setIsConfirmOrderModalSuccessModalOpen,
     fetchCart,
     addItemToCartHandler,
+    removeItemFromCartHandler,
   };
 
   return <CartContext.Provider value={value}>{children}</CartContext.Provider>;

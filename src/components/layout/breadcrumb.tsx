@@ -3,7 +3,6 @@ import { findCategoryURL } from "@/lib/category";
 import { Category } from "@/services/category/types";
 import { Item } from "@/services/item/types";
 import Link from "next/link";
-import { Fragment } from "react";
 
 const BreadCrumb = ({
   cart = false,
@@ -50,13 +49,16 @@ const BreadCrumbItem = ({
   label: string;
   link?: string;
 }) => {
-  const Component = link ? Link : Fragment;
-  return (
-    <Component href={link}>
+  return link ? (
+    <Link href={link}>
       <p className="hover:text-gray-800 flex items-center gap-x-1 whitespace-nowrap">
         <span className="text-xl">/</span> {label}
       </p>
-    </Component>
+    </Link>
+  ) : (
+    <p className="hover:text-gray-800 flex items-center gap-x-1 whitespace-nowrap">
+      <span className="text-xl">/</span> {label}
+    </p>
   );
 };
 

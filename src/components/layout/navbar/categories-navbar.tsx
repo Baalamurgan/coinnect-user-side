@@ -178,8 +178,8 @@ const SubCategoryList = ({ category }: { category: Category }) => {
 
   return (
     <DropdownMenu.Sub>
-      <DropdownMenu.SubTrigger className="DropdownMenuSubTrigger">
-        <Link href={`/category/${findCategoryURL(category)}`}>
+      <Link href={`/category/${findCategoryURL(category)}`}>
+        <DropdownMenu.SubTrigger className="DropdownMenuSubTrigger">
           <div
             className="flex items-center gap-x-1"
             title={`/category/${findCategoryURL(category)}`}
@@ -189,8 +189,8 @@ const SubCategoryList = ({ category }: { category: Category }) => {
               <ChevronRightIcon />
             </div>
           </div>
-        </Link>
-      </DropdownMenu.SubTrigger>
+        </DropdownMenu.SubTrigger>
+      </Link>
       <DropdownMenu.Portal>
         <DropdownMenu.SubContent
           className="DropdownMenuSubContent"
