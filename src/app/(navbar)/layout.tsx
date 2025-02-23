@@ -1,8 +1,10 @@
 "use client";
 
 import Navbar from "@/components/layout/navbar";
+import Loader from "@/components/loader";
 import ItemAddedToCartModal from "@/components/modal/item-added-to-cart";
 import Section from "@/components/ui/section";
+import { useAuth } from "@/context/AuthContext";
 import { useCart } from "@/context/CartContext";
 
 export default function RootLayout({
@@ -14,10 +16,14 @@ export default function RootLayout({
     isItemAddedToCartSuccessModalOpen,
     setIsItemAddedToCartSuccessModalOpen,
   } = useCart();
+  const { user } = useAuth();
+
+  if (user === undefined) return <Loader className="h-full" />;
+
   return (
     <>
-      <Navbar />
-      <Section>{children}</Section>
+      <Navbar user={user} />
+      <Section className="h-[calc(100vh-60px)]">{children}</Section>
       {isItemAddedToCartSuccessModalOpen && (
         <ItemAddedToCartModal
           isOpen={isItemAddedToCartSuccessModalOpen}

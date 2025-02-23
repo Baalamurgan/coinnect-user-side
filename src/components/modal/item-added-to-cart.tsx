@@ -119,6 +119,7 @@ const ItemAddedToCartModal = ({
           toast.error("Something went wrong. Please try again");
         else if (response.data) {
           setIsItemAddedToCartSuccessModalOpen(false);
+          localStorage.removeItem("order_id");
           push(`/success/${cart.id}`);
           toast.success("Order confirmed");
         }
@@ -160,7 +161,9 @@ const ItemAddedToCartModal = ({
                 name="username"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Name</FormLabel>
+                    <FormLabel className="text-base font-medium">
+                      Name
+                    </FormLabel>
                     <FormControl>
                       <Input
                         className="w-[80%]"
@@ -179,7 +182,9 @@ const ItemAddedToCartModal = ({
                 name="email"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Email</FormLabel>
+                    <FormLabel className="text-base font-medium">
+                      Email
+                    </FormLabel>
                     <FormControl>
                       <Input
                         className="w-[80%]"
@@ -198,12 +203,14 @@ const ItemAddedToCartModal = ({
                 name="phone"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Phone Number</FormLabel>
+                    <FormLabel className="text-base font-medium">
+                      Phone Number
+                    </FormLabel>
                     <FormControl>
                       <div className="flex items-center gap-x-2">
                         <p className="font-medium">+91</p>
                         <Input
-                          className="w-[80%]"
+                          className="w-[72.5%]"
                           type="number"
                           placeholder="987-654-3210"
                           disabled={loading}
@@ -248,7 +255,12 @@ const ItemAddedToCartModal = ({
                   </Button>
                 </Dialog.Close>
                 <div className="flex items-center justify-end w-full gap-x-6">
-                  <div onClick={() => push(`/cart`)}>
+                  <div
+                    onClick={() => {
+                      setIsItemAddedToCartSuccessModalOpen(false);
+                      push(`/cart`);
+                    }}
+                  >
                     <Button
                       className="h-5 cursor-pointer"
                       variant="secondary"

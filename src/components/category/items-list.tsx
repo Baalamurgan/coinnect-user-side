@@ -12,14 +12,16 @@ import { Button } from "../ui/button";
 
 const ItemsList = ({ items }: { items: Item[]; category: Category }) => {
   return (
-    <div className="mt-10 flex gap-x-10 gap-y-3">
-      {items.map((item) => {
-        return (
-          <div key={item.id}>
-            <ItemCard item={item} />
-          </div>
-        );
-      })}
+    <div className="pt-8 pb-5">
+      <div className="flex flex-wrap gap-x-10 gap-y-3 px-10">
+        {items.map((item) => {
+          return (
+            <div key={item.id}>
+              <ItemCard item={item} />
+            </div>
+          );
+        })}
+      </div>
     </div>
   );
 };

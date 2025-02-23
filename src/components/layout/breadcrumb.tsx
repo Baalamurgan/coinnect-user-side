@@ -14,7 +14,7 @@ const BreadCrumb = ({
 }) => {
   const categorySlugs = findCategoryURL(category).split("/");
   return (
-    <div className="my-10 bg-gray-200 px-8 py-6 w-full">
+    <div className="my-10 bg-gray-200 px-6 py-6 w-full">
       <div className="flex flex-wrap items-center gap-x-1 text-sm text-gray-600">
         <Link href="/">
           <p className="hover:text-gray-800">Home</p>

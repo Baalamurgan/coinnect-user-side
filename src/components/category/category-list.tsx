@@ -10,20 +10,22 @@ const CategoryList = ({ category }: { category: Category; items?: Item[] }) => {
     (c) => c.parent_category_id === category.id
   );
   return (
-    <div className="mt-10 shadow-md p-5 px-10">
-      {subCategories.length === 0 ? (
-        <p className="text-center">No data found</p>
-      ) : (
-        <div className="grid grid-cols-3 lg:grid-cols-4 gap-y-3 gap-x-8">
-          {subCategories.map((category) => {
-            return (
-              <div key={category.id}>
-                <CategoryCard category={category} />
-              </div>
-            );
-          })}
-        </div>
-      )}
+    <div className="bg-white shadow-md pt-8 pb-5">
+      <div className="p-5 px-10">
+        {subCategories.length === 0 ? (
+          <p className="text-center">No data found</p>
+        ) : (
+          <div className="grid grid-cols-3 lg:grid-cols-4 gap-y-3 gap-x-8">
+            {subCategories.map((category) => {
+              return (
+                <div key={category.id}>
+                  <CategoryCard category={category} />
+                </div>
+              );
+            })}
+          </div>
+        )}
+      </div>
     </div>
   );
 };

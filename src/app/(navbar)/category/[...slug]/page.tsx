@@ -27,7 +27,9 @@ export default async function Page({
   return (
     <div>
       <BreadCrumb category={category} />
-      <h1 className="text-3xl text-blue-600 font-semibold">{category.name}</h1>
+      <h1 className="text-3xl text-blue-600 font-semibold ml-10">
+        {category.name}
+      </h1>
       {data && data.length > 0 ? (
         <ItemsList category={category} items={data} />
       ) : (

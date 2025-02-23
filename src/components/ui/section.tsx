@@ -21,7 +21,7 @@ export default function Section({
   return (
     <div
       {...props}
-      className={["flex items-center justify-center px-5", className].join(" ")}
+      className={["flex justify-center px-5", className].join(" ")}
     >
       <div
         style={innerStyle}
