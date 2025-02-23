@@ -5,6 +5,7 @@ import { ExclamationTriangleIcon } from "@heroicons/react/24/outline";
 import { CheckBadgeIcon, TrashIcon } from "@heroicons/react/24/solid";
 import Image from "next/image";
 import { Button } from "../ui/button";
+import Tag from "../ui/Tag";
 
 const CartItems = ({ cart }: { cart: Cart }) => {
   const { setIsConfirmOrderModalSuccessModalOpen, removeItemFromCartHandler } =
@@ -92,13 +93,9 @@ const CartItems = ({ cart }: { cart: Cart }) => {
         <div className="flex items-center gap-x-1 mb-4">
           <h2 className="text-xl font-semibold">Order Summary</h2>
           {cart.status === "booked" ? (
-            <div className="flex items-center justify-center border border-green-400 px-2 py-0.5 rounded-lg bg-green-200">
-              <p className="text-[13px] text-green-800">Order placed</p>
-            </div>
+            <Tag color="green">Order placed</Tag>
           ) : cart.status === "cancelled" ? (
-            <div className="flex items-center justify-center border border-yellow-400 px-2 py-0.5 rounded-lg bg-yellow-200">
-              <p className="text-[13px] text-yellow-800">Order cancelled</p>
-            </div>
+            <Tag color="yellow">Order cancelled</Tag>
           ) : null}
         </div>
         <div className="flex justify-between text-base font-semibold">

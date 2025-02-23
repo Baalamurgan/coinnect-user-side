@@ -54,8 +54,6 @@ export default function UserAuthLoginForm() {
         },
         {}
       );
-      console.log(response);
-
       if (response.error)
         toast.error(
           sentencize(response?.error.response?.data?.message) ||

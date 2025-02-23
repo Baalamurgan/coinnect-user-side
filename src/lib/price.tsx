@@ -1,5 +1,3 @@
-import React from "react";
-
 const displayPrice = ({ price, gst }: { price: number; gst?: number }) => {
   return (
     <>
