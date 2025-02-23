@@ -1,6 +1,7 @@
 "use client";
 import EmptyCart from "@/components/cart/empty-cart";
 import Loader from "@/components/loader";
+import { getLocal } from "@/lib/localStorage";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
@@ -9,8 +10,8 @@ export default function Page() {
   const { replace } = useRouter();
 
   useEffect(() => {
-    const order_id = localStorage.getItem("order_id") as string | undefined;
-    if (order_id) replace(`/cart/${order_id}`);
+    const local_order_id = getLocal("order_id");
+    if (local_order_id) replace(`/cart/${local_order_id}`);
     else setIsNoOrderID(true);
   }, [replace]);
 

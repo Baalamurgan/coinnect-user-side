@@ -1,5 +1,6 @@
 "use client";
 
+import { getLocal } from "@/lib/localStorage";
 import { orderService } from "@/services/order/service";
 import { Cart } from "@/services/order/types";
 import React, {
@@ -18,7 +19,7 @@ interface CartContextType {
   loading: boolean;
   isItemAddedToCartSuccessModalOpen: boolean;
   setIsItemAddedToCartSuccessModalOpen: Dispatch<SetStateAction<boolean>>;
-  fetchCart: () => Promise<void>;
+  fetchCart: (_order_id?: string) => Promise<Cart | null>;
   addItemToCartHandler: ({
     item_id,
     quantity,
@@ -55,10 +56,11 @@ export const CartProvider: React.FC<CartProviderProps> = ({ children }) => {
     fetchCart();
   }, []);
 
-  const fetchCart = async () => {
+  const fetchCart = async (order_id_prop?: string) => {
+    console.log("fetching cart");
     setCart(undefined);
     setLoading(true);
-    const order_id = localStorage.getItem("order_id") as string | undefined;
+    const order_id = order_id_prop || getLocal("order_id");
     if (order_id) {
       const response = await orderService.getById(
         {},
@@ -67,15 +69,22 @@ export const CartProvider: React.FC<CartProviderProps> = ({ children }) => {
           order_id,
         }
       );
-      if (response.error) setCart(null);
-      else if (response.data) {
+      console.log({ order_id, response });
+
+      if (response.error) {
+        setCart(null);
+        return null;
+      } else if (response.data) {
         localStorage.setItem("order_id", response.data.id);
         setCart(response.data);
+        return response.data;
       }
     } else {
       setCart(null);
+      return null;
     }
     setLoading(false);
+    return null;
   };
 
   const addItemToCartHandler = async ({
@@ -86,10 +95,7 @@ export const CartProvider: React.FC<CartProviderProps> = ({ children }) => {
     item_id: string;
     quantity?: number;
   }): Promise<{ success: boolean }> => {
-    const local_order_id = localStorage.getItem("order_id") as
-      | string
-      | undefined;
-
+    const local_order_id = getLocal("order_id");
     let order_id = local_order_id || "";
 
     if (!local_order_id) {
@@ -120,7 +126,7 @@ export const CartProvider: React.FC<CartProviderProps> = ({ children }) => {
         return { success: false };
       } else if (response.data) {
         toast.success("Item added to cart");
-        await fetchCart();
+        await fetchCart(order_id);
         return { success: true };
       }
     }

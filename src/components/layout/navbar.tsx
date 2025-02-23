@@ -10,6 +10,7 @@ import { Logo } from "../logo";
 import { Button } from "../ui/button";
 import Section from "../ui/section";
 import CategoriesDropdown from "./navbar/categories-navbar";
+import { getLocal } from "@/lib/localStorage";
 
 const Navbar = ({ user }: { user: Profile | null }) => {
   const navItems: {
@@ -37,6 +38,7 @@ const Navbar = ({ user }: { user: Profile | null }) => {
     },
   ];
   const { cart } = useCart();
+  const local_order_id = getLocal("order_id");
 
   return (
     <Section className="">
@@ -70,7 +72,10 @@ const Navbar = ({ user }: { user: Profile | null }) => {
           })}
         </div>
         <div className="flex items-center gap-x-5">
-          <Link href={`/cart`} className="hover:text-blue-600">
+          <Link
+            href={`/cart/${local_order_id}`}
+            className="hover:text-blue-600"
+          >
             <div className="relative">
               <ShoppingCartIcon className="h-8 w-8" />
               <div className="absolute -top-2 -right-2 bg-blue-500 h-4 w-4 rounded-full flex items-center justify-center p-3">
