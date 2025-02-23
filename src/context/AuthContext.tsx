@@ -63,6 +63,11 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       );
       if (response.error) {
         setUser(null);
+        if (response.error.response?.data.message === "not found") {
+          localStorage.removeItem("user_id");
+          toast.error("Account not found. Please log in again");
+          push(`/login`);
+        }
         return null;
       } else if (response.data) {
         localStorage.setItem("user_id", response.data.id);

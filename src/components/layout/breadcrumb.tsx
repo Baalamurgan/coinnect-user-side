@@ -6,13 +6,15 @@ import Link from "next/link";
 import { Fragment } from "react";
 
 const BreadCrumb = ({
+  cart = false,
   category,
   item,
 }: {
-  category: Category;
+  cart?: boolean;
+  category?: Category;
   item?: Item;
 }) => {
-  const categorySlugs = findCategoryURL(category).split("/");
+  const categorySlugs = category ? findCategoryURL(category).split("/") : [];
   return (
     <div className="my-10 bg-gray-200 px-6 py-6 w-full">
       <div className="flex flex-wrap items-center gap-x-1 text-sm text-gray-600">
@@ -27,7 +29,7 @@ const BreadCrumb = ({
               key={s}
               label={slug_category.name}
               link={
-                slug_category.slug === category.slug && !item
+                category && slug_category.slug === category.slug && !item
                   ? ""
                   : `/category/${findCategoryURL(slug_category)}`
               }
@@ -35,6 +37,7 @@ const BreadCrumb = ({
           );
         })}
         {item && <BreadCrumbItem label={item.name} />}
+        {cart && <BreadCrumbItem label={"Cart"} />}
       </div>
     </div>
   );

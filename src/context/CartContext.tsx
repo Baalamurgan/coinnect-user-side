@@ -69,13 +69,13 @@ export const CartProvider: React.FC<CartProviderProps> = ({ children }) => {
           order_id,
         }
       );
-      console.log({ order_id, response });
-
       if (response.error) {
         setCart(null);
+        if (response.error.response?.data.message === "not found")
+          localStorage.removeItem("order_id");
         return null;
       } else if (response.data) {
-        localStorage.setItem("order_id", response.data.id);
+        if (!order_id_prop) localStorage.setItem("order_id", response.data.id);
         setCart(response.data);
         return response.data;
       }
