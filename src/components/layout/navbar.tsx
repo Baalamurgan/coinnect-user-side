@@ -80,7 +80,9 @@ const Navbar = ({ user }: { user: Profile | null }) => {
               <ShoppingCartIcon className="h-8 w-8" />
               <div className="absolute -top-2 -right-2 bg-blue-500 h-4 w-4 rounded-full flex items-center justify-center p-3">
                 <p className="text-white">
-                  {cart?.order_items ? cart?.order_items.length : 0}
+                  {local_order_id === cart?.id && cart?.order_items
+                    ? cart?.order_items.length
+                    : 0}
                 </p>
               </div>
             </div>
@@ -106,7 +108,7 @@ const Navbar = ({ user }: { user: Profile | null }) => {
             </div>
           ) : (
             <Link href="/login">
-              <Button>Login</Button>
+              <Button className="h-5">Login</Button>
             </Link>
           )}
         </div>

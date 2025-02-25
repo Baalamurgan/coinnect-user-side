@@ -92,8 +92,8 @@ export const createFetcher =
         process.env.NEXT_PHASE === PHASE_PRODUCTION_BUILD
           ? undefined
           : typeof window === "undefined"
-          ? 3000
-          : undefined,
+            ? 3000
+            : undefined,
       ...defaultOptions,
       ...options,
       data: isFormData
@@ -126,9 +126,11 @@ export const ROUTES = {
     },
     SIGNUP: apiRoute(`/auth/signup`),
     LOGIN: apiRoute(`/auth/login`),
-    FETCHPROFILE: apiRoute(`/auth/profile`),
-    UPDATEPROFILE: (p: { user_id: string }) =>
-      apiRoute(`/auth/update/${p.user_id}`),
+    PROFILE: {
+      FETCH: apiRoute("/auth/profile"),
+      UPDATE: (p: { user_id: string }) =>
+        apiRoute(`/auth/profile/update/${p.user_id}`),
+    },
   },
   CATEGORY: {
     GETALL: apiRoute(`/category`),

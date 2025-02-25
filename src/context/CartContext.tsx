@@ -18,6 +18,7 @@ export type ConfimOrderModalVariant = "add_item" | "confirm_order" | "";
 
 interface CartContextType {
   cart: Cart | null | undefined;
+  setCart: Dispatch<SetStateAction<Cart | null | undefined>>;
   loading: boolean;
   isConfirmOrderModalSuccessModalOpen: ConfimOrderModalVariant;
   setIsConfirmOrderModalSuccessModalOpen: Dispatch<
@@ -82,6 +83,11 @@ export const CartProvider: React.FC<CartProviderProps> = ({ children }) => {
           localStorage.removeItem("order_id");
         return null;
       } else if (response.data) {
+        // if (response.data.status !== "pending") {
+        //   localStorage.removeItem("order_id");
+        //   setCart(null);
+        //   return null;
+        // }
         if (!order_id_prop) localStorage.setItem("order_id", response.data.id);
         setCart(response.data);
         return response.data;
@@ -103,13 +109,20 @@ export const CartProvider: React.FC<CartProviderProps> = ({ children }) => {
     quantity?: number;
   }): Promise<{ success: boolean }> => {
     const local_order_id = getLocal("order_id");
+    const local_user_id = getLocal("user_id") || "";
     let order_id = local_order_id || "";
 
     if (!local_order_id) {
-      const response = await orderService.create({}, {}, {});
+      const response = await orderService.create(
+        {
+          user_id: local_user_id,
+        },
+        {},
+        {}
+      );
       if (response.error) {
         setCart(null);
-        toast.error("Something went wrong. Please try again");
+        toast.error("Something went wrong. Please refresh and try again");
         return { success: false };
       } else if (response.data) {
         localStorage.setItem("order_id", response.data.id);
@@ -171,6 +184,7 @@ export const CartProvider: React.FC<CartProviderProps> = ({ children }) => {
 
   const value = {
     cart,
+    setCart,
     loading,
     isConfirmOrderModalSuccessModalOpen,
     setIsConfirmOrderModalSuccessModalOpen,

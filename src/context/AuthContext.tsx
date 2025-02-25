@@ -1,11 +1,14 @@
 "use client";
 
+import { getLocal } from "@/lib/localStorage";
 import { authService } from "@/services/auth/service";
 import { Profile } from "@/services/auth/types";
 import { useRouter } from "next/navigation";
 import React, {
   createContext,
+  Dispatch,
   ReactNode,
+  SetStateAction,
   useContext,
   useEffect,
   useState,
@@ -14,6 +17,7 @@ import { toast } from "sonner";
 
 interface AuthContextType {
   user: Profile | null | undefined;
+  setUser: Dispatch<SetStateAction<Profile | null | undefined>>;
   loading: boolean;
   logout: () => void;
   fetchProfile: (_user_id_prop?: string) => Promise<Profile | null>;
@@ -52,8 +56,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const fetchProfile = async (user_id_prop?: string) => {
     setUser(undefined);
     setLoading(true);
-    const user_id =
-      user_id_prop || (localStorage.getItem("user_id") as string | undefined);
+    const local_user_id = getLocal("user_id");
+    const user_id = user_id_prop || local_user_id;
     if (user_id) {
       const response = await authService.fetchProfile(
         {
@@ -84,6 +88,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   const value = {
     user,
+    setUser,
     loading,
     logout,
     fetchProfile,

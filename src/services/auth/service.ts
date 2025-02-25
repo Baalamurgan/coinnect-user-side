@@ -17,7 +17,7 @@ const login = createFetcher<Profile | null, unknown, unknown>({
 });
 
 const fetchProfile = createFetcher<Profile, FetchProfilePayload>({
-  url: ROUTES.AUTH.FETCHPROFILE,
+  url: ROUTES.AUTH.PROFILE.FETCH,
   method: "POST",
 });
 
@@ -28,8 +28,8 @@ const updateProfile = createFetcher<
     user_id: string;
   }
 >({
-  url: ({ user_id }) => ROUTES.AUTH.UPDATEPROFILE({ user_id }),
-  method: "POST",
+  url: ({ user_id }) => ROUTES.AUTH.PROFILE.UPDATE({ user_id }),
+  method: "PUT",
 });
 
 export const authService = {

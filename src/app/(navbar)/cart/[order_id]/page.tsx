@@ -31,6 +31,12 @@ export default function Page() {
     if (cart) setIsFetchingUrlCart(false);
   }, [cart]);
 
+  useEffect(() => {
+    /// removing so user can add another order when navigating away from this page
+    if (cart && cart.status !== "pending" && local_order_id === cart.id)
+      localStorage.removeItem("order_id");
+  }, [local_order_id, cart]);
+
   if (
     cart === undefined ||
     (local_order_id != url_order_id && cart === null && isFetchingUrlCart)

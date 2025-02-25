@@ -49,10 +49,11 @@ const ItemAddedToCartModal = ({
   const [loading, startTransition] = useTransition();
   const {
     cart,
+    setCart,
     isConfirmOrderModalSuccessModalOpen,
     setIsConfirmOrderModalSuccessModalOpen,
   } = useCart();
-  const { user, fetchProfile } = useAuth();
+  const { user, setUser } = useAuth();
 
   const defaultValues = {
     username: user?.username || "",
@@ -67,17 +68,46 @@ const ItemAddedToCartModal = ({
   });
 
   const onSubmit = async (data: UserFormValue) => {
-    console.log(data);
-
     if (!data.terms || !cart)
       return toast.error(
         "Please agree to the terms and conditions to proceed."
       );
 
     startTransition(async () => {
-      console.log({ data });
-      let user_id = "";
-      if (user?.id) {
+      let user_id = user?.id || null;
+      if (!user) {
+        const response = await authService.signup(
+          {
+            email: data.email,
+            password: "New@1234",
+            username: data.username,
+          },
+          {}
+        );
+        if (response.error) {
+          toast.error("Error signing up");
+          // DOUBT: If the user enters another email
+          // if (response.error.response?.data.message === 'user already exists') {
+          //   const response = await authService.fetchProfileByEmail({
+          //     email: data.email
+          //   });
+          //   if (response.error) {
+          //     return toast.error('Error signing up');
+          //   } else if (response.data) {
+          //     setUser(response.data);
+          //     user_id = response.data.id;
+          //   }
+          // }
+        } else if (response.data) {
+          setUser(response.data);
+          user_id = response.data.id;
+        }
+      } else if (
+        user_id &&
+        (user.email !== data.email ||
+          user.phone !== data.phone ||
+          user.username !== data.username)
+      ) {
         await authService
           .updateProfile(
             {
@@ -87,31 +117,31 @@ const ItemAddedToCartModal = ({
             },
             {},
             {
-              user_id: user.id,
+              user_id,
             }
           )
-          .then(() => (user_id = user.id));
-      } else {
-        await authService
-          .signup(
-            {
-              email: data.email,
-              password: "New@1234",
-              username: data.username,
-            },
-            {}
-          )
-          .then((res) => {
-            if (res.data) user_id = res.data.id;
-          });
+          .then(() => {
+            setUser((p) =>
+              p
+                ? {
+                    ...p,
+                    username: data.username,
+                    email: data.email,
+                    phone: data.phone,
+                  }
+                : null
+            );
+            toast.success("Updated user profile");
+          })
+          .catch(() => toast.success("Error updating profile"));
       }
-      const newUser = await fetchProfile(user_id);
-      if (!newUser || !cart)
+
+      if (!user_id || !cart)
         toast.error("Something went wrong. Please try again");
       else {
         const response = await orderService.confirm(
           {
-            user_id: newUser.id,
+            user_id,
           },
           {},
           {
@@ -123,6 +153,7 @@ const ItemAddedToCartModal = ({
         else if (response.data) {
           setIsConfirmOrderModalSuccessModalOpen("");
           localStorage.removeItem("order_id");
+          setCart(null);
           push(`/success/${cart.id}`);
           toast.success("Order confirmed");
         }
@@ -136,6 +167,7 @@ const ItemAddedToCartModal = ({
         ...p,
         email: user.email,
         username: user.username,
+        phone: user.phone || "",
       }));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
