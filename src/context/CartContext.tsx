@@ -3,6 +3,7 @@
 import { getLocal } from "@/lib/localStorage";
 import { orderService } from "@/services/order/service";
 import { Cart } from "@/services/order/types";
+import { useRouter } from "next/navigation";
 import React, {
   createContext,
   Dispatch,
@@ -59,6 +60,7 @@ export const CartProvider: React.FC<CartProviderProps> = ({ children }) => {
     isConfirmOrderModalSuccessModalOpen,
     setIsConfirmOrderModalSuccessModalOpen,
   ] = useState<ConfimOrderModalVariant>("");
+  const { push } = useRouter();
 
   useEffect(() => {
     fetchCart();
@@ -143,6 +145,16 @@ export const CartProvider: React.FC<CartProviderProps> = ({ children }) => {
       if (response.error) {
         setCart(null);
         toast.error("Something went wrong. Please try again");
+        if (
+          response.error.response?.data.message === "order confirmed already"
+        ) {
+          localStorage.removeItem("order_id");
+          toast.error(
+            "Your previous order has already been confirmed by our team. Please check your order details."
+          );
+          push(`/cart/${order_id}`);
+          return { success: false };
+        }
         return { success: false };
       } else if (response.data) {
         toast.success("Item added to cart");

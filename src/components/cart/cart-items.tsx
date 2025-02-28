@@ -1,11 +1,44 @@
 import { useCart } from "@/context/CartContext";
 import displayPrice from "@/lib/price";
+import { sentencize } from "@/lib/utils";
 import { Cart } from "@/services/order/types";
-import { ExclamationTriangleIcon } from "@heroicons/react/24/outline";
 import { CheckBadgeIcon, TrashIcon } from "@heroicons/react/24/solid";
 import Image from "next/image";
 import { Button } from "../ui/button";
-import Tag from "../ui/Tag";
+import Tag from "../ui/tag";
+
+export const STATUS_OPTIONS = [
+  {
+    value: "pending",
+    label: "Pending",
+    color: "yellow",
+  },
+  {
+    value: "booked",
+    label: "Booked",
+    color: "blue",
+  },
+  {
+    value: "paid",
+    label: "Paid",
+    color: "green",
+  },
+  {
+    value: "shipped",
+    label: "Shipped",
+    color: "orange",
+  },
+  {
+    value: "delivered",
+    label: "Delivered",
+    color: "teal",
+  },
+  {
+    value: "cancelled",
+    label: "Cancelled",
+    color: "red",
+  },
+];
 
 const CartItems = ({ cart }: { cart: Cart }) => {
   const { setIsConfirmOrderModalSuccessModalOpen, removeItemFromCartHandler } =
@@ -92,27 +125,22 @@ const CartItems = ({ cart }: { cart: Cart }) => {
       <div className="bg-gray-100 p-6 rounded-lg min-w-[300px] max-w-[500px] lg:w-full place-self-end xl:place-self-auto h-fit">
         <div className="flex items-center gap-x-1 mb-4">
           <h2 className="text-xl font-semibold">Order Summary</h2>
-          {cart.status === "booked" ? (
-            <Tag color="green">Order placed</Tag>
-          ) : cart.status === "cancelled" ? (
-            <Tag color="yellow">Order cancelled</Tag>
-          ) : null}
+          <Tag
+            color={STATUS_OPTIONS.find((s) => s.value === cart.status)?.color}
+          >
+            {sentencize(cart.status)}
+          </Tag>
         </div>
         <div className="flex justify-between text-base font-semibold">
           <p>Total</p>
           <div className="flex items-center gap-x-1">
             <p>{displayPrice({ price: cart.billable_amount })}</p>
-            {cart.status === "booked" ? (
+            {cart.status !== "pending" && (
               <CheckBadgeIcon
                 className="h-6 w-6 text-green-500"
-                title="Blaced"
+                title={cart.status}
               />
-            ) : cart.status === "cancelled" ? (
-              <ExclamationTriangleIcon
-                className="h-6 w-6 text-yellow-500"
-                title="Cancelled"
-              />
-            ) : null}
+            )}
           </div>
         </div>
         {cart.status === "pending" && (

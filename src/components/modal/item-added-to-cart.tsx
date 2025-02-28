@@ -15,7 +15,7 @@ import { orderService } from "@/services/order/service";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as Dialog from "@radix-ui/react-dialog";
 import { Cross2Icon } from "@radix-ui/react-icons";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import React, { useEffect, useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
@@ -46,6 +46,7 @@ const ItemAddedToCartModal = ({
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }) => {
   const { push } = useRouter();
+  const pathname = usePathname();
   const [loading, startTransition] = useTransition();
   const {
     cart,
@@ -282,7 +283,12 @@ const ItemAddedToCartModal = ({
                 )}
               />
               <div className="flex items-center justify-between w-full !mt-8">
-                <Dialog.Close asChild>
+                <Dialog.Close
+                  asChild
+                  onClick={() => {
+                    push(`/category/${pathname.split("/")[2]}` || "/");
+                  }}
+                >
                   <Button
                     className="h-5 cursor-pointer"
                     variant="outline"

@@ -78,9 +78,9 @@ const ItemInformation = ({
           </div>
           <hr />
           <div className="flex items-center gap-x-5 text-sm">
-            <p>
+            {/* <p>
               <span className="font-medium">SKU:</span> {item.sku}
-            </p>
+            </p> */}
             <div className="flex items-center">
               <p className="font-medium">Category:</p>
               <Link href={`/category/${findCategoryURL(category)}`}>
