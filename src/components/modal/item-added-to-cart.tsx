@@ -35,6 +35,11 @@ const formSchema = z.object({
     .string()
     .min(1, { message: "Enter a valid phone number" })
     .max(10, { message: "Enter a valid phone number" }),
+  address_line_1: z.string().min(1, { message: "Enter a valid address" }),
+  address_line_2: z.string().min(1, { message: "Enter a valid address" }),
+  address_line_3: z.string().min(1, { message: "Enter a valid address" }),
+  state: z.string().min(1, { message: "Enter your state" }),
+  pin: z.string().min(1, { message: "Enter your PIN code" }),
   terms: z.boolean(),
 });
 
@@ -58,6 +63,11 @@ const ItemAddedToCartModal = ({
     username: user?.username || "",
     email: user?.email || "",
     phone: "",
+    address_line_1: user?.address_line_1 || "",
+    address_line_2: user?.address_line_2 || "",
+    address_line_3: user?.address_line_3 || "",
+    state: user?.state || "",
+    pin: user?.pin || "",
     terms: false,
   };
 
@@ -80,6 +90,12 @@ const ItemAddedToCartModal = ({
             email: data.email,
             password: "New@1234",
             username: data.username,
+            phone: data.phone,
+            address_line_1: data.address_line_1,
+            address_line_2: data.address_line_2,
+            address_line_3: data.address_line_3,
+            state: data.state,
+            pin: data.pin,
           },
           {}
         );
@@ -105,7 +121,13 @@ const ItemAddedToCartModal = ({
         user_id &&
         (user.email !== data.email ||
           user.phone !== data.phone ||
-          user.username !== data.username)
+          user.username !== data.username ||
+          user.phone !== data.phone ||
+          user.address_line_1 !== data.address_line_1 ||
+          user.address_line_2 !== data.address_line_2 ||
+          user.address_line_3 !== data.address_line_3 ||
+          user.state !== data.state ||
+          user.pin !== data.pin)
       ) {
         await authService
           .updateProfile(
@@ -113,6 +135,11 @@ const ItemAddedToCartModal = ({
               username: data.username,
               email: data.email,
               phone: data.phone,
+              address_line_1: data.address_line_1,
+              address_line_2: data.address_line_2,
+              address_line_3: data.address_line_3,
+              state: data.state,
+              pin: data.pin,
             },
             {},
             {
@@ -153,8 +180,8 @@ const ItemAddedToCartModal = ({
           setOrderSuccessModalType("");
           localStorage.removeItem("order_id");
           setCart(null);
-          push(`/success/${cart.id}`);
           toast.success("Order confirmed");
+          push(`/success/${cart.id}`);
         }
       }
     });
@@ -181,7 +208,7 @@ const ItemAddedToCartModal = ({
     <Modal isOpen={isOpen} setIsOpen={setIsOpen}>
       <Dialog.Portal forceMount>
         <Dialog.Overlay className="DialogOverlay" />
-        <Dialog.Content className="DialogContent !bg-white !overflow-hidden">
+        <Dialog.Content className={`DialogContent !bg-white !overflow-hidden`}>
           <Dialog.Title className="text-xl font-medium">
             {orderSuccessModalType === "add_item"
               ? "Item added to cart!"
@@ -193,7 +220,7 @@ const ItemAddedToCartModal = ({
               className="space-y-2 mt-4 flex flex-col gap-y-3"
             >
               {orderSuccessModalType === "confirm_order" ? (
-                <div>
+                <div className="overflow-auto max-h-[400px] py-3">
                   <div className="space-y-2 flex flex-col gap-y-3">
                     <p className="text-sm font-medium mt-2">
                       Enter your details
@@ -266,20 +293,93 @@ const ItemAddedToCartModal = ({
                     />
                     <FormField
                       control={form.control}
-                      name="terms"
-                      render={() => (
-                        <FormItem className="!mt-3">
+                      name="address_line_1"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Address Line 1*</FormLabel>
                           <FormControl>
-                            <Checkbox
-                              id="t&c"
-                              label={
-                                "I agree to be contacted by a representative for order confirmation"
-                              }
-                              labelClassName="max-w-[400px]"
-                              value={form.getValues("terms") ? "true" : "false"}
-                              onCheckedChange={(value: boolean) =>
-                                form.setValue("terms", value)
-                              }
+                            <Input
+                              type="text"
+                              className="w-[80%] ml-1"
+                              placeholder="Enter your address line 1"
+                              disabled={loading}
+                              {...field}
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={form.control}
+                      name="address_line_2"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Address Line 2</FormLabel>
+                          <FormControl>
+                            <Input
+                              type="text"
+                              className="w-[80%] ml-1"
+                              placeholder="Enter your address line 2"
+                              disabled={loading}
+                              {...field}
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={form.control}
+                      name="address_line_3"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Address Line 3</FormLabel>
+                          <FormControl>
+                            <Input
+                              type="text"
+                              className="w-[80%] ml-1"
+                              placeholder="Enter your address line 3"
+                              disabled={loading}
+                              {...field}
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={form.control}
+                      name="state"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>State*</FormLabel>
+                          <FormControl>
+                            <Input
+                              type="text"
+                              className="w-[80%] ml-1"
+                              placeholder="Enter your state"
+                              disabled={loading}
+                              {...field}
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={form.control}
+                      name="pin"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>PIN code*</FormLabel>
+                          <FormControl>
+                            <Input
+                              type="text"
+                              className="w-[80%] ml-1"
+                              placeholder="Enter your PIN code"
+                              disabled={loading}
+                              {...field}
                             />
                           </FormControl>
                           <FormMessage />
@@ -293,6 +393,30 @@ const ItemAddedToCartModal = ({
                   <Confetti spread={40} />
                   <CheckCircleIcon className="text-green-400 h-20 w-20" />
                 </div>
+              )}
+              {orderSuccessModalType === "confirm_order" && (
+                <FormField
+                  control={form.control}
+                  name="terms"
+                  render={() => (
+                    <FormItem className="!mt-3">
+                      <FormControl>
+                        <Checkbox
+                          id="t&c"
+                          label={
+                            "I agree to be contacted by a representative for order confirmation"
+                          }
+                          labelClassName="max-w-[400px]"
+                          value={form.getValues("terms") ? "true" : "false"}
+                          onCheckedChange={(value: boolean) =>
+                            form.setValue("terms", value)
+                          }
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
               )}
               <div className="flex items-center justify-between w-full !mt-8">
                 <Dialog.Close

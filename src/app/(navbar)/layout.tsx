@@ -19,7 +19,7 @@ export default function RootLayout({
 
   return (
     <>
-      <Navbar user={user} />
+      <Navbar />
       <Section className="h-[calc(100vh-60px)]">{children}</Section>
       {orderSuccessModalType && (
         <ItemAddedToCartModal

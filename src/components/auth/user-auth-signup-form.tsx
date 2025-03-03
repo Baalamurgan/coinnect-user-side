@@ -26,6 +26,15 @@ const formSchema = z.object({
   }),
   email: z.string().email({ message: "Enter a valid email address" }),
   password: z.string().min(1, { message: "Enter a valid password" }),
+  phone: z
+    .string()
+    .min(1, { message: "Enter a valid phone number" })
+    .max(10, { message: "Enter a valid phone number" }),
+  address_line_1: z.string().min(1, { message: "Enter a valid address" }),
+  address_line_2: z.string(),
+  address_line_3: z.string(),
+  state: z.string().min(1, { message: "Enter your state" }),
+  pin: z.string().min(1, { message: "Enter your PIN code" }),
 });
 
 type UserFormValue = z.infer<typeof formSchema>;
@@ -41,6 +50,12 @@ export default function UserAuthSignupForm() {
     username: "",
     email: "",
     password: "",
+    phone: "",
+    address_line_1: "",
+    address_line_2: "",
+    address_line_3: "",
+    state: "",
+    pin: "",
   };
 
   const form = useForm<UserFormValue>({
@@ -55,6 +70,12 @@ export default function UserAuthSignupForm() {
           email: data.email,
           username: data.username,
           password: data.password,
+          phone: data.phone,
+          address_line_1: data.address_line_1,
+          address_line_2: data.address_line_2,
+          address_line_3: data.address_line_3,
+          pin: data.pin,
+          state: data.state,
         },
         {}
       );
@@ -81,14 +102,14 @@ export default function UserAuthSignupForm() {
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
-          className="w-full space-y-2"
+          className="w-full flex flex-col gap-y-3"
         >
           <FormField
             control={form.control}
             name="username"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Name</FormLabel>
+                <FormLabel>Name*</FormLabel>
                 <FormControl>
                   <Input
                     type="text"
@@ -106,7 +127,7 @@ export default function UserAuthSignupForm() {
             name="email"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Email</FormLabel>
+                <FormLabel>Email*</FormLabel>
                 <FormControl>
                   <Input
                     type="email"
@@ -124,11 +145,125 @@ export default function UserAuthSignupForm() {
             name="password"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Password</FormLabel>
+                <FormLabel>Password*</FormLabel>
                 <FormControl>
                   <Input
                     type="password"
                     placeholder="********"
+                    disabled={loading}
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="phone"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel className="text-base font-medium">
+                  Phone Number *
+                </FormLabel>
+                <FormControl>
+                  <div className="flex items-center gap-x-2">
+                    <p className="font-medium">+91</p>
+                    <Input
+                      className="w-full"
+                      type="number"
+                      placeholder="987-654-3210"
+                      disabled={loading}
+                      {...field}
+                    />
+                  </div>
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="address_line_1"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Address Line 1*</FormLabel>
+                <FormControl>
+                  <Input
+                    type="text"
+                    placeholder="Enter your address line 1"
+                    disabled={loading}
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="address_line_2"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Address Line 2</FormLabel>
+                <FormControl>
+                  <Input
+                    type="text"
+                    placeholder="Enter your address line 2"
+                    disabled={loading}
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="address_line_3"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Address Line 3</FormLabel>
+                <FormControl>
+                  <Input
+                    type="text"
+                    placeholder="Enter your address line 3"
+                    disabled={loading}
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="state"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>State*</FormLabel>
+                <FormControl>
+                  <Input
+                    type="text"
+                    placeholder="Enter your state"
+                    disabled={loading}
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="pin"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>PIN code*</FormLabel>
+                <FormControl>
+                  <Input
+                    type="text"
+                    placeholder="Enter your PIN code"
                     disabled={loading}
                     {...field}
                   />

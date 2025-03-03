@@ -1,8 +1,9 @@
 "use client";
 
+import { useAuth } from "@/context/AuthContext";
 import { useCart } from "@/context/CartContext";
+import { getLocal } from "@/lib/localStorage";
 import { cn } from "@/lib/utils";
-import { Profile } from "@/services/auth/types";
 import { ShoppingCartIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
 import * as React from "react";
@@ -10,9 +11,8 @@ import { Logo } from "../logo";
 import { Button } from "../ui/button";
 import Section from "../ui/section";
 import CategoriesDropdown from "./navbar/categories-navbar";
-import { getLocal } from "@/lib/localStorage";
 
-const Navbar = ({ user }: { user: Profile | null }) => {
+const Navbar = () => {
   const navItems: {
     label?: string;
     icon?: React.JSX.Element;
@@ -38,6 +38,7 @@ const Navbar = ({ user }: { user: Profile | null }) => {
     },
   ];
   const { cart } = useCart();
+  const { user, logout } = useAuth();
   const local_order_id = getLocal("order_id");
 
   return (
@@ -95,7 +96,7 @@ const Navbar = ({ user }: { user: Profile | null }) => {
               >
                 <p className="text-blue-800 capitalize">{user.username[0]}</p>
               </div>
-              <div className="hidden group-hover:flex absolute top-0 right-0 lg:-right-20 mt-8 pt-2">
+              <div className="hidden group-hover:flex absolute top-0 right-0 lg:-right-10 mt-8 pt-2">
                 <div className="bg-white rounded-md group-hover flex flex-col gap-y-3 p-5 shadow-lg">
                   <p>
                     <span className="font-semibold">Name:</span> {user.username}
@@ -103,6 +104,9 @@ const Navbar = ({ user }: { user: Profile | null }) => {
                   <p>
                     <span className="font-semibold">Email:</span> {user.email}
                   </p>
+                  <Button className="h-5 cursor-pointer" onClick={logout}>
+                    Logout
+                  </Button>
                 </div>
               </div>
             </div>

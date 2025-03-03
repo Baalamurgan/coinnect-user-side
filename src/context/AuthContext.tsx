@@ -47,7 +47,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   }, []);
 
   const logout = (): void => {
-    setUser(undefined);
+    setUser(null);
     localStorage.removeItem("user_id");
     toast.success("Logged out successfully");
     push("/login");

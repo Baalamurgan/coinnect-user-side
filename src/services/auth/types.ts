@@ -3,6 +3,11 @@ export type Profile = {
   email: string;
   username: string;
   phone: string | null;
+  address_line_1: string;
+  address_line_2: string | null;
+  address_line_3: string | null;
+  state: string;
+  pin: string;
   created_at: number;
   updated_at: number;
 };
@@ -16,6 +21,12 @@ export type SignupPayload = {
   username: string;
   email: string;
   password: string;
+  phone: string;
+  address_line_1: string;
+  address_line_2?: string;
+  address_line_3?: string;
+  state: string;
+  pin: string;
 };
 
 export type FetchProfilePayload = {
@@ -25,5 +36,10 @@ export type FetchProfilePayload = {
 export type UpdateProfilePayload = {
   username: string;
   email?: string;
-  phone?: string;
+  phone: string;
+  address_line_1: string;
+  address_line_2?: string;
+  address_line_3?: string;
+  state: string;
+  pin: string;
 };
