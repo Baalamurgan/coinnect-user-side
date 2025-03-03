@@ -29,8 +29,7 @@ const ItemsList = ({ items }: { items: Item[]; category: Category }) => {
 
 const ItemCard = ({ item }: { item: Item }) => {
   const [isLoading, startTransition] = useTransition();
-  const { addItemToCartHandler, setIsConfirmOrderModalSuccessModalOpen } =
-    useCart();
+  const { addItemToCartHandler, setOrderSuccessModalType } = useCart();
   return (
     <div className=" shadow-lg rounded-md flex flex-col items-center p-3 border border-blue-100">
       <Link href={`/item/${findItemURL(item)}`}>
@@ -70,8 +69,7 @@ const ItemCard = ({ item }: { item: Item }) => {
               const response = await addItemToCartHandler({
                 item_id: item.id,
               });
-              if (response.success)
-                setIsConfirmOrderModalSuccessModalOpen("add_item");
+              if (response.success) setOrderSuccessModalType("add_item");
             });
           }}
         >

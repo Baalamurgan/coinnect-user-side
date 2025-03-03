@@ -41,8 +41,7 @@ export const STATUS_OPTIONS = [
 ];
 
 const CartItems = ({ cart }: { cart: Cart }) => {
-  const { setIsConfirmOrderModalSuccessModalOpen, removeItemFromCartHandler } =
-    useCart();
+  const { setOrderSuccessModalType, removeItemFromCartHandler } = useCart();
 
   return (
     <div className="grid grid-cols-1 xl:grid-cols-3 gap-6 p-6">
@@ -147,9 +146,7 @@ const CartItems = ({ cart }: { cart: Cart }) => {
           <div className="flex items-center mt-5">
             <Button
               className="bg-green-500 hover:bg-green-600 h-5 cursor-pointer w-fit xl:w-full self-end"
-              onClick={() =>
-                setIsConfirmOrderModalSuccessModalOpen("confirm_order")
-              }
+              onClick={() => setOrderSuccessModalType("confirm_order")}
             >
               Confirm Order
             </Button>

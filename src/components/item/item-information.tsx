@@ -22,8 +22,7 @@ const ItemInformation = ({
 }) => {
   const [quantity, setQuantity] = useState(1);
   const [isLoading, startTransition] = useTransition();
-  const { addItemToCartHandler, setIsConfirmOrderModalSuccessModalOpen } =
-    useCart();
+  const { addItemToCartHandler, setOrderSuccessModalType } = useCart();
   return (
     <div>
       <div className="flex gap-x-8">
@@ -68,7 +67,7 @@ const ItemInformation = ({
                     quantity,
                   });
                   if (response.success) {
-                    setIsConfirmOrderModalSuccessModalOpen("add_item");
+                    setOrderSuccessModalType("add_item");
                   }
                 });
               }}

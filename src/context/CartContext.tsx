@@ -21,10 +21,8 @@ interface CartContextType {
   cart: Cart | null | undefined;
   setCart: Dispatch<SetStateAction<Cart | null | undefined>>;
   loading: boolean;
-  isConfirmOrderModalSuccessModalOpen: ConfimOrderModalVariant;
-  setIsConfirmOrderModalSuccessModalOpen: Dispatch<
-    SetStateAction<ConfimOrderModalVariant>
-  >;
+  orderSuccessModalType: ConfimOrderModalVariant;
+  setOrderSuccessModalType: Dispatch<SetStateAction<ConfimOrderModalVariant>>;
   fetchCart: (order_id?: string) => Promise<Cart | null>;
   removeItemFromCartHandler: (p: {
     order_id: string;
@@ -56,10 +54,8 @@ interface CartProviderProps {
 export const CartProvider: React.FC<CartProviderProps> = ({ children }) => {
   const [cart, setCart] = useState<Cart | undefined | null>(undefined);
   const [loading, setLoading] = useState<boolean>(true);
-  const [
-    isConfirmOrderModalSuccessModalOpen,
-    setIsConfirmOrderModalSuccessModalOpen,
-  ] = useState<ConfimOrderModalVariant>("");
+  const [orderSuccessModalType, setOrderSuccessModalType] =
+    useState<ConfimOrderModalVariant>("");
   const { push } = useRouter();
 
   useEffect(() => {
@@ -186,7 +182,7 @@ export const CartProvider: React.FC<CartProviderProps> = ({ children }) => {
         toast.error("Something went wrong. Please try again");
         return { success: false };
       } else if (response.data) {
-        toast.success("Item removed to cart");
+        toast.success("Item removed from cart");
         await fetchCart(order_id);
         return { success: true };
       }
@@ -198,8 +194,8 @@ export const CartProvider: React.FC<CartProviderProps> = ({ children }) => {
     cart,
     setCart,
     loading,
-    isConfirmOrderModalSuccessModalOpen,
-    setIsConfirmOrderModalSuccessModalOpen,
+    orderSuccessModalType,
+    setOrderSuccessModalType,
     fetchCart,
     addItemToCartHandler,
     removeItemFromCartHandler,

@@ -2,14 +2,13 @@
 import { useEffect } from "react";
 import { useReward } from "react-rewards";
 
-export default function Confetti() {
-  const { reward: confettiReward, isAnimating: isConfettiAnimating } =
-    useReward("confettiReward", "confetti", {
-      lifetime: 500,
-      elementCount: 200,
-      angle: 90,
-      spread: 90,
-    });
+export default function Confetti({ spread = 90 }: { spread?: number }) {
+  const { reward: confettiReward } = useReward("confettiReward", "confetti", {
+    lifetime: 500,
+    elementCount: 200,
+    angle: 90,
+    spread,
+  });
 
   useEffect(() => {
     confettiReward();

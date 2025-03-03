@@ -12,16 +12,18 @@ import { useAuth } from "@/context/AuthContext";
 import { useCart } from "@/context/CartContext";
 import { authService } from "@/services/auth/service";
 import { orderService } from "@/services/order/service";
+import { CheckCircleIcon } from "@heroicons/react/24/solid";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as Dialog from "@radix-ui/react-dialog";
 import { Cross2Icon } from "@radix-ui/react-icons";
 import { usePathname, useRouter } from "next/navigation";
 import React, { useEffect, useTransition } from "react";
-import { useForm } from "react-hook-form";
+import { SubmitErrorHandler, useForm } from "react-hook-form";
 import { toast } from "sonner";
 import * as z from "zod";
 import { Button } from "../ui/button";
 import Checkbox from "../ui/checkbox";
+import Confetti from "../ui/confetti";
 import Modal from "../ui/modal";
 
 const formSchema = z.object({
@@ -48,12 +50,8 @@ const ItemAddedToCartModal = ({
   const { push } = useRouter();
   const pathname = usePathname();
   const [loading, startTransition] = useTransition();
-  const {
-    cart,
-    setCart,
-    isConfirmOrderModalSuccessModalOpen,
-    setIsConfirmOrderModalSuccessModalOpen,
-  } = useCart();
+  const { cart, setCart, orderSuccessModalType, setOrderSuccessModalType } =
+    useCart();
   const { user, setUser } = useAuth();
 
   const defaultValues = {
@@ -152,7 +150,7 @@ const ItemAddedToCartModal = ({
         if (response.error)
           toast.error("Something went wrong. Please try again");
         else if (response.data) {
-          setIsConfirmOrderModalSuccessModalOpen("");
+          setOrderSuccessModalType("");
           localStorage.removeItem("order_id");
           setCart(null);
           push(`/success/${cart.id}`);
@@ -161,6 +159,9 @@ const ItemAddedToCartModal = ({
       }
     });
   };
+
+  const onError: SubmitErrorHandler<UserFormValue> = async (error) =>
+    console.log(error);
 
   useEffect(() => {
     if (user) {
@@ -180,108 +181,119 @@ const ItemAddedToCartModal = ({
     <Modal isOpen={isOpen} setIsOpen={setIsOpen}>
       <Dialog.Portal forceMount>
         <Dialog.Overlay className="DialogOverlay" />
-        <Dialog.Content className="DialogContent !bg-white !overflow-auto ">
+        <Dialog.Content className="DialogContent !bg-white !overflow-hidden">
           <Dialog.Title className="text-xl font-medium">
-            {isConfirmOrderModalSuccessModalOpen === "add_item"
+            {orderSuccessModalType === "add_item"
               ? "Item added to cart!"
               : "Confirm your order"}
           </Dialog.Title>
-          <Dialog.Description className="text-sm font-medium mt-2">
-            Would you like to enter your details?
-          </Dialog.Description>
           <Form {...form}>
             <form
-              onSubmit={form.handleSubmit(onSubmit)}
-              className="space-y-2 mt-8 flex flex-col gap-y-3"
+              onSubmit={form.handleSubmit(onSubmit, onError)}
+              className="space-y-2 mt-4 flex flex-col gap-y-3"
             >
-              <FormField
-                control={form.control}
-                name="username"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel className="text-base font-medium">
-                      Name
-                    </FormLabel>
-                    <FormControl>
-                      <Input
-                        className="w-[80%]"
-                        type="text"
-                        placeholder="Enter your username"
-                        disabled={loading}
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="email"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel className="text-base font-medium">
-                      Email
-                    </FormLabel>
-                    <FormControl>
-                      <Input
-                        className="w-[80%]"
-                        type="email"
-                        placeholder="Enter your email"
-                        disabled={loading}
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="phone"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel className="text-base font-medium">
-                      Phone Number
-                    </FormLabel>
-                    <FormControl>
-                      <div className="flex items-center gap-x-2">
-                        <p className="font-medium">+91</p>
-                        <Input
-                          className="w-[72.5%]"
-                          type="number"
-                          placeholder="987-654-3210"
-                          disabled={loading}
-                          {...field}
-                        />
-                      </div>
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="terms"
-                render={() => (
-                  <FormItem className="!mt-5">
-                    <FormControl>
-                      <Checkbox
-                        id="t&c"
-                        label={
-                          "I agree to be contacted by a representative to confirm my order."
-                        }
-                        labelClassName="max-w-[400px]"
-                        value={form.getValues("terms") ? "true" : "false"}
-                        onCheckedChange={(value: boolean) =>
-                          form.setValue("terms", value)
-                        }
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+              {orderSuccessModalType === "confirm_order" ? (
+                <div>
+                  <div className="space-y-2 flex flex-col gap-y-3">
+                    <p className="text-sm font-medium mt-2">
+                      Enter your details
+                    </p>
+                    <FormField
+                      control={form.control}
+                      name="username"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel className="text-base font-medium">
+                            Name
+                          </FormLabel>
+                          <FormControl>
+                            <Input
+                              className="w-[80%] ml-1"
+                              type="text"
+                              placeholder="Enter your username"
+                              disabled={loading}
+                              {...field}
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={form.control}
+                      name="email"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel className="text-base font-medium">
+                            Email
+                          </FormLabel>
+                          <FormControl>
+                            <Input
+                              className="w-[80%] ml-1"
+                              type="email"
+                              placeholder="Enter your email"
+                              disabled={loading}
+                              {...field}
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={form.control}
+                      name="phone"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel className="text-base font-medium">
+                            Phone Number
+                          </FormLabel>
+                          <FormControl>
+                            <div className="flex items-center gap-x-2">
+                              <p className="font-medium">+91</p>
+                              <Input
+                                className="w-[72.5%]"
+                                type="number"
+                                placeholder="987-654-3210"
+                                disabled={loading}
+                                {...field}
+                              />
+                            </div>
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={form.control}
+                      name="terms"
+                      render={() => (
+                        <FormItem className="!mt-3">
+                          <FormControl>
+                            <Checkbox
+                              id="t&c"
+                              label={
+                                "I agree to be contacted by a representative for order confirmation"
+                              }
+                              labelClassName="max-w-[400px]"
+                              value={form.getValues("terms") ? "true" : "false"}
+                              onCheckedChange={(value: boolean) =>
+                                form.setValue("terms", value)
+                              }
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+                </div>
+              ) : (
+                <div className="flex items-center justify-center">
+                  <Confetti spread={40} />
+                  <CheckCircleIcon className="text-green-400 h-20 w-20" />
+                </div>
+              )}
               <div className="flex items-center justify-between w-full !mt-8">
                 <Dialog.Close
                   asChild
@@ -294,16 +306,16 @@ const ItemAddedToCartModal = ({
                     variant="outline"
                     type="button"
                   >
-                    {isConfirmOrderModalSuccessModalOpen === "add_item"
+                    {orderSuccessModalType === "add_item"
                       ? "Continue shopping"
                       : "View Cart"}
                   </Button>
                 </Dialog.Close>
                 <div className="flex items-center justify-end w-full gap-x-6">
-                  {isConfirmOrderModalSuccessModalOpen === "add_item" ? (
+                  {orderSuccessModalType === "add_item" ? (
                     <div
                       onClick={() => {
-                        setIsConfirmOrderModalSuccessModalOpen("");
+                        setOrderSuccessModalType("");
                         push(`/cart`);
                       }}
                     >
@@ -315,10 +327,13 @@ const ItemAddedToCartModal = ({
                         View Cart
                       </Button>
                     </div>
-                  ) : null}
-                  {/* <Dialog.Close asChild> */}
-                  <Button className="h-5 cursor-pointer">Confirm Order</Button>
-                  {/* </Dialog.Close> */}
+                  ) : (
+                    <div className="my-3 place-self-end">
+                      <Button className="h-5 cursor-pointer">
+                        Confirm Order
+                      </Button>
+                    </div>
+                  )}
                 </div>
               </div>
             </form>

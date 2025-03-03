@@ -34,7 +34,7 @@ const confirm = createFetcher<
   }
 >({
   url: ({ order_id }) => ROUTES.ORDER.CONFIRM({ order_id }),
-  method: "POST",
+  method: "PUT",
 });
 
 const addItem = createFetcher<Cart, AddItemToOrderPayload, unknown>({
