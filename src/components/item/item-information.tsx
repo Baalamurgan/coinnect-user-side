@@ -1,17 +1,19 @@
 "use client";
 
+import { useCart } from "@/context/CartContext";
 import { findCategoryURL } from "@/lib/category";
 import displayPrice from "@/lib/price";
 import { sentencize } from "@/lib/utils";
+import clearCachesByServerAction from "@/server/server";
 import { Category } from "@/services/category/types";
 import { Item } from "@/services/item/types";
 import Image from "next/image";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useState, useTransition } from "react";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import Tabs from "../ui/tabs";
-import { useCart } from "@/context/CartContext";
 
 const ItemInformation = ({
   item,
@@ -23,6 +25,8 @@ const ItemInformation = ({
   const [quantity, setQuantity] = useState(1);
   const [isLoading, startTransition] = useTransition();
   const { addItemToCartHandler, setOrderSuccessModalType } = useCart();
+  const pathname = usePathname();
+
   return (
     <div>
       <div className="flex gap-x-8">
@@ -59,6 +63,7 @@ const ItemInformation = ({
             ) : null}
             <Button
               className="my-3 bg-green-600 hover:bg-green-700 h-5 w-[100px] cursor-pointer"
+              disabled={item.stock === 0}
               loading={isLoading}
               onClick={async () => {
                 startTransition(async () => {
@@ -68,6 +73,8 @@ const ItemInformation = ({
                   });
                   if (response.success) {
                     setOrderSuccessModalType("add_item");
+                    setQuantity(1);
+                    clearCachesByServerAction(pathname);
                   }
                 });
               }}

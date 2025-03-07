@@ -74,7 +74,9 @@ const CartItems = ({ cart }: { cart: Cart }) => {
                   </div>
                 </td>
                 <td className="text-center font-medium">
-                  {displayPrice({ price: item.billable_amount })}
+                  {displayPrice({
+                    price: item.billable_amount / item.quantity,
+                  })}
                 </td>
                 <td className="text-center px-5">
                   <div className="flex items-center justify-center gap-x-2 border py-1 rounded-md bg-gray-200">
@@ -95,7 +97,7 @@ const CartItems = ({ cart }: { cart: Cart }) => {
                 </td>
                 <td className="text-center font-medium">
                   {displayPrice({
-                    price: item.billable_amount * item.quantity,
+                    price: item.billable_amount,
                   })}
                 </td>
                 <td className="text-center px-5">
