@@ -12,6 +12,7 @@ export default function Confetti({ spread = 90 }: { spread?: number }) {
 
   useEffect(() => {
     confettiReward();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (

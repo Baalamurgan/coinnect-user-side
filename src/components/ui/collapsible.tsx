@@ -30,6 +30,7 @@ export const Collapsible: FC<Props> = ({
     if (contentRef.current) {
       setMaxHeight(collapsed ? "0" : `${contentRef.current.scrollHeight}px`);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [collapsed, children, ...deps]);
 
   return (
