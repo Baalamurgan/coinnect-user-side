@@ -1,5 +1,10 @@
 import { createFetcher, ROUTES } from "../api";
-import { AddItemToOrderPayload, Cart } from "./types";
+import {
+  AddItemToOrderPayload,
+  Cart,
+  OrderItem,
+  UpdateItemsQuantityPayload,
+} from "./types";
 
 const create = createFetcher<
   Cart,
@@ -34,12 +39,21 @@ const confirm = createFetcher<
   }
 >({
   url: ({ order_id }) => ROUTES.ORDER.CONFIRM({ order_id }),
-  method: "PUT",
+  method: "PATCH",
 });
 
 const addItem = createFetcher<Cart, AddItemToOrderPayload, unknown>({
   url: ROUTES.ORDER.ITEM.ADD,
   method: "POST",
+});
+
+const updateItemsQuantity = createFetcher<
+  OrderItem,
+  UpdateItemsQuantityPayload,
+  unknown
+>({
+  url: ROUTES.ORDER.ITEM.UPDATE_QUANTITY,
+  method: "PATCH",
 });
 
 const removeItem = createFetcher<
@@ -61,4 +75,5 @@ export const orderService = {
   confirm,
   addItem,
   removeItem,
+  updateItemsQuantity,
 };

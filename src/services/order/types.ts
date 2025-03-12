@@ -42,3 +42,8 @@ export type AddItemToOrderPayload = {
   item_id: string;
   quantity: number;
 };
+
+export type UpdateItemsQuantityPayload = {
+  order_item_id: string;
+  quantity: number;
+};

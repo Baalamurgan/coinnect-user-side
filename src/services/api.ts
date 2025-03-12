@@ -149,6 +149,7 @@ export const ROUTES = {
       ADD: apiRoute(`/order/item/add`),
       REMOVE: (p: { order_id: string; order_item_id: string }) =>
         apiRoute(`/order/item/${p.order_id}/${p.order_item_id}`),
+      UPDATE_QUANTITY: apiRoute(`/order/item/update-quantity`),
     },
   },
 };

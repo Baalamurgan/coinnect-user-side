@@ -3,14 +3,22 @@
 import { useCart } from "@/context/CartContext";
 import { findCategoryURL } from "@/lib/category";
 import displayPrice from "@/lib/price";
-import { sentencize } from "@/lib/utils";
+import { cn, sentencize } from "@/lib/utils";
 import clearCachesByServerAction from "@/server/server";
 import { Category } from "@/services/category/types";
 import { Item } from "@/services/item/types";
+import { orderService } from "@/services/order/service";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useState, useTransition } from "react";
+import {
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+  useTransition,
+} from "react";
+import { toast } from "sonner";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import Tabs from "../ui/tabs";
@@ -24,8 +32,50 @@ const ItemInformation = ({
 }) => {
   const [quantity, setQuantity] = useState(1);
   const [isLoading, startTransition] = useTransition();
-  const { addItemToCartHandler, setOrderSuccessModalType } = useCart();
+  const {
+    cart,
+    addItemToCartHandler,
+    removeItemFromCartHandler,
+    setOrderSuccessModalType,
+    fetchCart,
+  } = useCart();
   const pathname = usePathname();
+
+  const itemAlreadyPresentInCart = useMemo(
+    () => cart?.order_items.find((o) => o.item_id === item.id),
+    [cart, item.id]
+  );
+
+  useEffect(() => {
+    if (itemAlreadyPresentInCart)
+      setQuantity(itemAlreadyPresentInCart.quantity);
+  }, [cart, itemAlreadyPresentInCart]);
+
+  const removeItemFromCart = useCallback(async () => {
+    if (!cart || !itemAlreadyPresentInCart) return;
+    const response = await removeItemFromCartHandler({
+      order_id: cart.id,
+      order_item_id: itemAlreadyPresentInCart.id,
+    });
+    if (response.success) {
+      setQuantity(1);
+      clearCachesByServerAction(pathname);
+    }
+  }, [cart, itemAlreadyPresentInCart, pathname, removeItemFromCartHandler]);
+
+  const updateItemsQuantityHandler = useCallback(async () => {
+    if (!cart || !itemAlreadyPresentInCart) return;
+    const response = await orderService.updateItemsQuantity({
+      order_item_id: itemAlreadyPresentInCart.id,
+      quantity,
+    });
+    if (response.data) {
+      await fetchCart();
+      setQuantity(quantity);
+      clearCachesByServerAction(pathname);
+      toast.success("Updated item's quantity successfully!");
+    } else toast.error("Something went wrong. Please try again");
+  }, [cart, itemAlreadyPresentInCart, pathname, quantity, fetchCart]);
 
   return (
     <div>
@@ -50,37 +100,76 @@ const ItemInformation = ({
             <p className="text-lg text-red-600">No stock available</p>
           )}
           <hr />
-          <div className="flex items-center gap-x-2">
-            {item.stock > 1 ? (
-              <Input
-                type="number"
-                value={quantity}
-                onChange={(e) => setQuantity(Number(e.target.value))}
-                min={1}
-                max={item.stock}
-                className="max-w-[60px] border-[0.1px] h-7 border-green-500 border-solid"
-              />
-            ) : null}
-            <Button
-              className="my-3 bg-green-600 hover:bg-green-700 h-5 w-[100px] cursor-pointer"
-              disabled={item.stock === 0}
-              loading={isLoading}
-              onClick={async () => {
-                startTransition(async () => {
-                  const response = await addItemToCartHandler({
-                    item_id: item.id,
-                    quantity,
-                  });
-                  if (response.success) {
-                    setOrderSuccessModalType("add_item");
-                    setQuantity(1);
-                    clearCachesByServerAction(pathname);
+          <div className="flex flex-col">
+            <div className="flex items-center gap-x-2">
+              {item.stock > 1 || itemAlreadyPresentInCart ? (
+                <Input
+                  type="number"
+                  value={quantity}
+                  onChange={(e) => setQuantity(Number(e.target.value))}
+                  min={cart && itemAlreadyPresentInCart ? 0 : 1}
+                  max={
+                    cart && itemAlreadyPresentInCart
+                      ? itemAlreadyPresentInCart.quantity + item.stock
+                      : item.stock
                   }
-                });
-              }}
-            >
-              Add to cart ({quantity})
-            </Button>
+                  className="max-w-[60px] border-[0.1px] h-7 border-green-500 border-solid"
+                />
+              ) : null}
+              <Button
+                className={cn(
+                  "my-3 h-5 w-[100px] cursor-pointer",
+                  quantity === 0 ||
+                    (itemAlreadyPresentInCart &&
+                      item.stock === 0 &&
+                      quantity === itemAlreadyPresentInCart.quantity)
+                    ? "bg-red-600 hover:bg-red-700"
+                    : "bg-green-600 hover:bg-green-700"
+                )}
+                loading={isLoading}
+                onClick={async () => {
+                  startTransition(async () => {
+                    if (itemAlreadyPresentInCart && cart) {
+                      if (
+                        quantity === 0 ||
+                        (itemAlreadyPresentInCart &&
+                          item.stock === 0 &&
+                          quantity === itemAlreadyPresentInCart.quantity)
+                      ) {
+                        removeItemFromCart();
+                      } else {
+                        updateItemsQuantityHandler();
+                      }
+                    } else {
+                      const response = await addItemToCartHandler({
+                        item_id: item.id,
+                        quantity,
+                      });
+                      if (response.success) {
+                        setOrderSuccessModalType("add_item");
+                        setQuantity(1);
+                        clearCachesByServerAction(pathname);
+                      } else
+                        toast.error("Something went wrong. Please try again");
+                    }
+                  });
+                }}
+              >
+                {itemAlreadyPresentInCart
+                  ? quantity === 0 ||
+                    (itemAlreadyPresentInCart &&
+                      item.stock === 0 &&
+                      quantity === itemAlreadyPresentInCart.quantity)
+                    ? `Remove from cart`
+                    : `Update cart`
+                  : `Add to cart (${quantity})`}
+              </Button>
+            </div>
+            {cart && itemAlreadyPresentInCart && (
+              <p className="text-sm">
+                Currently in cart: {itemAlreadyPresentInCart.quantity}
+              </p>
+            )}
           </div>
           <hr />
           <div className="flex items-center gap-x-5 text-sm">
