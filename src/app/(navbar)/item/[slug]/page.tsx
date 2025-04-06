@@ -37,7 +37,11 @@ export default async function Page({
   return (
     <div>
       <BreadCrumb category={category} categories={categories} item={data} />
-      <ItemInformation category={category} item={data} />
+      <ItemInformation
+        category={category}
+        item={data}
+        categories={categories}
+      />
       {/* <h1 className="text-3xl text-blue-600 font-semibold">
         {sentencize(category.name)}
       </h1> */}

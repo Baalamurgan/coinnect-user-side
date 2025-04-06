@@ -26,9 +26,11 @@ import Tabs from "../ui/tabs";
 const ItemInformation = ({
   item,
   category,
+  categories,
 }: {
   item: Item;
   category: Category;
+  categories: Category[];
 }) => {
   const [quantity, setQuantity] = useState(1);
   const [isLoading, startTransition] = useTransition();
@@ -178,7 +180,7 @@ const ItemInformation = ({
             </p> */}
             <div className="flex items-center">
               <p className="font-medium">Category:</p>
-              <Link href={`/category/${findCategoryURL(category)}`}>
+              <Link href={`/category/${findCategoryURL(category, categories)}`}>
                 <p className="text-blue-600 hover:text-blue-800 ml-1">
                   {item.year}
                 </p>
