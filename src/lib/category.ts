@@ -1,10 +1,10 @@
-import { categories } from "@/data";
 import { Category } from "@/services/category/types";
 
 const CATEGORY_URL_SEPARATOR = "/";
 
 export const findCategoryURL = (
   category: Category,
+  categories: Category[],
   existingURL?: string
 ): string => {
   const url = existingURL || "";
@@ -16,6 +16,7 @@ export const findCategoryURL = (
   if (!parent_category) return url;
   return findCategoryURL(
     parent_category,
+    categories,
     category.slug + (existingURL ? CATEGORY_URL_SEPARATOR : "") + url
   );
 };

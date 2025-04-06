@@ -1,11 +1,17 @@
-import { categories } from "@/data";
 import { findCategoryURL } from "@/lib/category";
 import { Category } from "@/services/category/types";
 import { Item } from "@/services/item/types";
 import { EnvelopeClosedIcon } from "@radix-ui/react-icons";
 import Link from "next/link";
 
-const CategoryList = ({ category }: { category: Category; items?: Item[] }) => {
+const CategoryList = ({
+  category,
+  categories,
+}: {
+  category: Category;
+  categories: Category[];
+  items?: Item[];
+}) => {
   const subCategories = categories.filter(
     (c) => c.parent_category_id === category.id
   );
@@ -19,7 +25,7 @@ const CategoryList = ({ category }: { category: Category; items?: Item[] }) => {
             {subCategories.map((category) => {
               return (
                 <div key={category.id}>
-                  <CategoryCard category={category} />
+                  <CategoryCard category={category} categories={categories} />
                 </div>
               );
             })}
@@ -30,10 +36,16 @@ const CategoryList = ({ category }: { category: Category; items?: Item[] }) => {
   );
 };
 
-const CategoryCard = ({ category }: { category: Category }) => {
+const CategoryCard = ({
+  category,
+  categories,
+}: {
+  category: Category;
+  categories: Category[];
+}) => {
   return (
     <div>
-      <Link href={`/category/${findCategoryURL(category)}`}>
+      <Link href={`/category/${findCategoryURL(category, categories)}`}>
         <div className="flex items-center gap-x-1 group cursor-pointer">
           <EnvelopeClosedIcon className="h-5 w-5 group-hover:text-gray-800" />
           <p className="group-hover:text-gray-800 group-hover:underline whitespace-nowrap">

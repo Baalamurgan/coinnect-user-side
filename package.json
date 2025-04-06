@@ -4,8 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev -p 3001",
-    "build": "node prebuild && next build",
-    "prebuild": "node prebuild",
+    "build": "next build",
     "start": "next start",
     "lint": "next lint"
   },

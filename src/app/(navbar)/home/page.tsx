@@ -1,9 +1,4 @@
-import Loader from "@/components/loader";
-import { categories } from "@/data";
-
 const HomePage = async () => {
-  if (!categories) return <Loader />;
-
   return (
     <div>
       {/* <Button variant="outline">Home page</Button>

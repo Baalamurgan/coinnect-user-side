@@ -1,6 +1,7 @@
 "use client";
 
-import { categories } from "@/data";
+import Loader from "@/components/loader";
+import { useConstants } from "@/context/ConstantsContext";
 import { findCategoryURL } from "@/lib/category";
 import { Category } from "@/services/category/types";
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
@@ -9,9 +10,12 @@ import Link from "next/link";
 import "./styles.css";
 
 const CategoriesDropdown = () => {
+  const { categories: allCategories } = useConstants();
   // const [bookmarksChecked, setBookmarksChecked] = React.useState(true);
   // const [urlsChecked, setUrlsChecked] = React.useState(false);
   // const [person, setPerson] = React.useState("pedro");
+
+  if (!allCategories) return <Loader />;
 
   return (
     <DropdownMenu.Root>
@@ -26,7 +30,10 @@ const CategoriesDropdown = () => {
 
       <DropdownMenu.Portal>
         <DropdownMenu.Content className="DropdownMenuContent" sideOffset={5}>
-          <CategoriesListDropdown categories={categories} />
+          <CategoriesListDropdown
+            categories={allCategories}
+            allCategories={allCategories}
+          />
         </DropdownMenu.Content>
         {/* <DropdownMenu.Content className="DropdownMenuContent" sideOffset={5}>
           <DropdownMenu.Item className="DropdownMenuItem">
@@ -128,9 +135,11 @@ export default CategoriesDropdown;
 
 const CategoriesListDropdown = ({
   categories: categoriesProp,
+  allCategories,
   innerLoop = false,
 }: {
   categories: Category[];
+  allCategories: Category[];
   innerLoop?: boolean;
 }) => {
   return (
@@ -138,7 +147,11 @@ const CategoriesListDropdown = ({
       {categoriesProp.map((category) => {
         if (!category.parent_category_id)
           return (
-            <SubCategoryList key={category.id} category={category} />
+            <SubCategoryList
+              key={category.id}
+              category={category}
+              allCategories={allCategories}
+            />
             // <div key={category.id}>
             //   <DropdownMenu.Item className="DropdownMenuItem">
             //     <p className="font-semibold">{category.name}</p>
@@ -148,15 +161,21 @@ const CategoriesListDropdown = ({
           );
         else if (!innerLoop) return null;
         else if (
-          categories.filter((c) => c.parent_category_id === category.id)
+          allCategories.filter((c) => c.parent_category_id === category.id)
             .length > 0
         )
-          return <SubCategoryList key={category.id} category={category} />;
+          return (
+            <SubCategoryList
+              key={category.id}
+              category={category}
+              allCategories={allCategories}
+            />
+          );
         else
           return (
             <Link
               key={category.id}
-              href={`/category/${findCategoryURL(category)}`}
+              href={`/category/${findCategoryURL(category, allCategories)}`}
             >
               <div>
                 <DropdownMenu.Item className="DropdownMenuItem">
@@ -171,18 +190,24 @@ const CategoriesListDropdown = ({
   );
 };
 
-const SubCategoryList = ({ category }: { category: Category }) => {
-  const subCategories = categories.filter(
+const SubCategoryList = ({
+  category,
+  allCategories,
+}: {
+  category: Category;
+  allCategories: Category[];
+}) => {
+  const subCategories = allCategories.filter(
     (c) => c.parent_category_id === category.id
   );
 
   return (
     <DropdownMenu.Sub>
-      <Link href={`/category/${findCategoryURL(category)}`}>
+      <Link href={`/category/${findCategoryURL(category, allCategories)}`}>
         <DropdownMenu.SubTrigger className="DropdownMenuSubTrigger">
           <div
             className="flex items-center gap-x-1"
-            title={`/category/${findCategoryURL(category)}`}
+            title={`/category/${findCategoryURL(category, allCategories)}`}
           >
             <p className="font-semibold">{category.name}</p>
             <div className="RightSlot">
@@ -197,7 +222,11 @@ const SubCategoryList = ({ category }: { category: Category }) => {
           sideOffset={2}
           alignOffset={-5}
         >
-          <CategoriesListDropdown categories={subCategories} innerLoop={true} />
+          <CategoriesListDropdown
+            categories={subCategories}
+            allCategories={allCategories}
+            innerLoop={true}
+          />
         </DropdownMenu.SubContent>
       </DropdownMenu.Portal>
     </DropdownMenu.Sub>

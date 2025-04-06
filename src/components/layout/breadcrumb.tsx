@@ -1,4 +1,3 @@
-import { categories } from "@/data";
 import { findCategoryURL } from "@/lib/category";
 import { Category } from "@/services/category/types";
 import { Item } from "@/services/item/types";
@@ -7,13 +6,17 @@ import Link from "next/link";
 const BreadCrumb = ({
   cart = false,
   category,
+  categories,
   item,
 }: {
   cart?: boolean;
   category?: Category;
+  categories: Category[];
   item?: Item;
 }) => {
-  const categorySlugs = category ? findCategoryURL(category).split("/") : [];
+  const categorySlugs = category
+    ? findCategoryURL(category, categories).split("/")
+    : [];
   return (
     <div className="my-10 bg-gray-200 px-6 py-6 w-full">
       <div className="flex flex-wrap items-center gap-x-1 text-sm text-gray-600">
@@ -30,7 +33,7 @@ const BreadCrumb = ({
               link={
                 category && slug_category.slug === category.slug && !item
                   ? ""
-                  : `/category/${findCategoryURL(slug_category)}`
+                  : `/category/${findCategoryURL(slug_category, categories)}`
               }
             />
           );

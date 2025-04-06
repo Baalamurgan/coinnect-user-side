@@ -1,6 +1,3 @@
-"use client";
-
-import { useCart } from "@/context/CartContext";
 import { findItemURL } from "@/lib/item";
 import displayPrice from "@/lib/price";
 import { cn } from "@/lib/utils";
@@ -8,8 +5,7 @@ import { Category } from "@/services/category/types";
 import { Item } from "@/services/item/types";
 import Image from "next/image";
 import Link from "next/link";
-import { useTransition } from "react";
-import { Button } from "../ui/button";
+import AddToCartCTA from "./add-to-cart.cta";
 
 const ItemsList = ({ items }: { items: Item[]; category: Category }) => {
   return (
@@ -28,8 +24,6 @@ const ItemsList = ({ items }: { items: Item[]; category: Category }) => {
 };
 
 const ItemCard = ({ item }: { item: Item }) => {
-  const [isLoading, startTransition] = useTransition();
-  const { addItemToCartHandler, setOrderSuccessModalType } = useCart();
   return (
     <div className=" shadow-lg rounded-md flex flex-col items-center p-3 border border-blue-100">
       <Link href={`/item/${findItemURL(item)}`}>
@@ -60,21 +54,7 @@ const ItemCard = ({ item }: { item: Item }) => {
         {item.stock === 0 ? (
           <p className="text-red-500 text-sm mt-2">Out of stock!</p>
         ) : null}
-        <Button
-          className="cursor-pointer h-6"
-          disabled={item.stock === 0}
-          loading={isLoading}
-          onClick={async () => {
-            startTransition(async () => {
-              const response = await addItemToCartHandler({
-                item_id: item.id,
-              });
-              if (response.success) setOrderSuccessModalType("add_item");
-            });
-          }}
-        >
-          Add to cart
-        </Button>
+        <AddToCartCTA item={item} />
       </div>
     </div>
   );

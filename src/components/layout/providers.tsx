@@ -1,14 +1,20 @@
-"use client";
-import { AuthProvider } from "@/context/AuthContext";
-import { CartProvider } from "@/context/CartContext";
+import { ConstantsProvider } from "@/context/ConstantsContext";
+import { getCategories } from "@/lib/getCategories";
 import React from "react";
+import ClientProviders from "./clientProviders";
 
-export default function Providers({ children }: { children: React.ReactNode }) {
+export default async function Providers({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  const categories = await getCategories();
+
   return (
     <>
-      <AuthProvider>
-        <CartProvider>{children}</CartProvider>
-      </AuthProvider>
+      <ConstantsProvider categories={categories.data?.categories || null}>
+        <ClientProviders>{children}</ClientProviders>
+      </ConstantsProvider>
     </>
   );
 }

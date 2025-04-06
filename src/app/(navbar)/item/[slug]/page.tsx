@@ -1,6 +1,6 @@
-import BreadCrumb from "@/components/layout/breadcrumb";
 import ItemInformation from "@/components/item/item-information";
-import { categories } from "@/data";
+import BreadCrumb from "@/components/layout/breadcrumb";
+import { getCategories } from "@/lib/getCategories";
 import { itemService } from "@/services/item/service";
 import { notFound } from "next/navigation";
 
@@ -19,13 +19,24 @@ export default async function Page({
     }
   );
 
+  let categories = null;
+
+  const response = await getCategories();
+  if (response.error) {
+    notFound();
+  } else if (response.data) {
+    categories = response.data.categories;
+  }
+
+  if (!categories) return notFound();
+
   const category = categories.find((c) => c.id === data?.category_id);
 
   if (!data || !category) return notFound();
 
   return (
     <div>
-      <BreadCrumb category={category} item={data} />
+      <BreadCrumb category={category} categories={categories} item={data} />
       <ItemInformation category={category} item={data} />
       {/* <h1 className="text-3xl text-blue-600 font-semibold">
         {sentencize(category.name)}
